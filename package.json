@@ -1,0 +1,11 @@
+{
+  "name": "date.picker",
+  "version": "0.0.1",
+  "description": "multiple choice for date picker",
+  "main": "index.js",
+  "scripts": {
+    "start": "sass ./assets/scss:./assets/css -w"
+  },
+  "author": "shinsouhitoshi.1203",
+  "license": "MIT"
+}
