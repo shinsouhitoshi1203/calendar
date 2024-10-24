@@ -1,0 +1,110 @@
+// this file can be used independently. 
+$breakpoints: (
+    xs: 0,
+    xxl: 1400px,
+    xl: 1200px,
+    lg: 992px,
+    md: 768px,
+    sm: 576px,
+);
+$displays: flex, grid, block, inline, none; 
+$widths: 10,20,30,40,50,60,70,80,90,100, initial; 
+
+@mixin display-responsive($bp, $mw) {
+    @if $bp!=xs {
+        @media (max-width: #{$mw - 0.02px}) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}
+
+@mixin display-option() {
+    @each $bp, $mw in $breakpoints {
+        @include display-responsive($bp, $mw) {
+            $infix : if($bp==xs, "", "-"+#{$bp});
+            @each $d in $displays {
+                .d#{$infix}-#{$d}{display: #{$d}!important;}
+            }
+        };
+    }
+}
+
+@mixin width-option() {
+    @each $bp, $mw in $breakpoints {
+        @include display-responsive($bp, $mw) {
+            $infix : if($bp==xs, "", "-"+#{$bp});
+            @each $w in $widths {
+                $width : if($w==initial, initial, #{$w}+"%");
+                .w#{$infix}-#{$w}{width: #{$width}!important;}
+            }
+        };
+    }
+}
+
+@mixin justify-option(){
+    $options: center, flex-start, flex-end, space-between, stretch;
+    @each $bp, $mw in $breakpoints {
+        $infix : if($bp==xs, "", "-"+#{$bp});
+        @include display-responsive($bp, $mw) {
+            @each $option in $options {
+                .jc#{$infix}-#{$option}{
+                    justify-content: $option;
+                }
+            }
+        }
+    }
+}
+
+@mixin align-option(){
+    $options: center, flex-start, flex-end, space-between, stretch;
+    @each $bp, $mw in $breakpoints {
+        $infix : if($bp==xs, "", "-"+#{$bp});
+        @include display-responsive($bp, $mw) {
+            @each $option in $options {
+                .ai#{$infix}-#{$option}{
+                    justify-content: $option;
+                }
+            }
+        }
+    }
+}
+
+@mixin font-weight-option(){
+    $options: 400,600,700,900;
+    @each $bp, $mw in $breakpoints {
+        $infix : if($bp==xs, "", "-"+#{$bp});
+        @include display-responsive($bp, $mw) {
+            @each $option in $options {
+                .fw#{$infix}-#{$option}{
+                    font-weight: $option;
+                }
+            }
+        }
+    }
+}
+@mixin font-size-option(){
+    $options: 10,12,14,16,24,36,48;
+    @each $bp, $mw in $breakpoints {
+        $infix : if($bp==xs, "", "-"+#{$bp});
+        @include display-responsive($bp, $mw) {
+            @each $option in $options {
+                .fs#{$infix}-#{$option}{
+                    font-size: #{$option * 0.1}rem;
+                }
+            }
+        }
+    }
+}
+
+@include display-option();
+@include width-option();
+@include align-option();
+@include justify-option();
+@include font-weight-option();
+@include font-size-option();
+
+
+
+// 12px < 14px < 16px > 24px > 36 > 48px

@@ -1,0 +1,10 @@
+@use "./../abstracts" as a;
+html {font-size: 62.5%;}
+body {
+    font: {weight: 400; size: 1.6rem; family: a.$narrow};
+    color: var(--text-caption);
+    background: var(--bg);
+}
+*, ::before, ::after {box-sizing: border-box;}
+
+

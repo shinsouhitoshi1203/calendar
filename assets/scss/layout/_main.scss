@@ -1,0 +1,11 @@
+.main {
+    article {
+        margin: 0;
+    }
+    
+    #article {
+        &-demo {
+            margin: 20px 0;
+        }
+    }
+}

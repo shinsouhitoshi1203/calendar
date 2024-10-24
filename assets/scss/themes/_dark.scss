@@ -1,0 +1,35 @@
+html[data-theme="dark"]{
+
+    // htmls data-theme = light;
+    
+    // ...
+        // default:
+        --bg: #2a2a2a;
+        --text-caption: #ffffff;
+        --text-disabled: #858585;
+        --icon: brightness(0) saturate(100%) invert(71%) sepia(4%) saturate(0%) hue-rotate(69deg) brightness(89%) contrast(92%);
+        --icon-hover: brightness(0) saturate(100%) invert(99%) sepia(2%) saturate(278%) hue-rotate(324deg) brightness(117%) contrast(100%);
+        --icon-disabled: brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(28%) hue-rotate(139deg) brightness(96%) contrast(90%);
+        
+    // components
+        // form 
+        --form-shadow: 0 5px 10px #ffffff0c;
+        --form-primary: #5865F2;
+        --form-bg: #121212;
+        --form-bd: #333333;
+        --form-caption: #a0a0a0;
+    
+    
+        --form-bg-hover: #212121;
+        --form-bd-hover: #444444;
+        --form-bd-error:#ff0000;
+        --form-bd-active: #ffffff;
+        --form-caption-disable: var(--text-disabled);
+    
+        // calendar
+        --day-text-in-month: #a0a0a0; 
+        --day-text-hover: #ffffff;
+        --day-text-outside: #232323;
+    // page: 
+        // demo.html
+    }

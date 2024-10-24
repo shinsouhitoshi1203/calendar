@@ -1,0 +1,135 @@
+
+//variables
+$row-cols: 6!default;
+$grid-breakpoints: (
+    xs: 0,
+    xxl: 1400px,
+    xl: 1200px,
+    lg: 992px,
+    md: 768px,
+    sm: 576px
+);
+$container-max-widths: (
+    sm: 100%,
+    md: 540px,
+    lg: 720px,
+    xl: 960px,
+    xxl: 1170px,
+);
+$grid-columns: 12;
+$grid-gutter-width: 30px;
+$gutters: (
+    0: 0,
+    1: 0.25,
+    2: 0.5,
+    3: 1,
+    4: 1.5,
+    5: 1.7,
+    6: 3,
+);
+// mixins and placeholders
+%container-base {
+    width: 100%;
+    margin-left: auto;margin-right: auto;
+    --gutter-x: #{$grid-gutter-width};
+    --gutter-y: #{$grid-gutter-width * 0};
+}
+
+// this grid system is made w/ mobile-first ideology
+@mixin addResponsive($bp, $mw) {
+    @if ($bp==xs) {
+        @content;
+    } @else {
+        @media (max-width: #{$mw - 0.02px}) {
+            @content;
+        }
+    }
+}
+
+@mixin row-cols($prefix) {
+    @for $i from 1 through $row-cols {
+        .row-cols#{$prefix}-#{$i}{
+            & > * {
+                flex: 0 0 auto;
+                width: calc(100% / #{$i})
+            }
+        }
+    }
+}
+
+@mixin col($prefix) {
+    @for $i from 1 through 12 {
+        .col#{$prefix}-#{$i}{
+            flex: 0 0 auto;
+            width: calc(100% / #{$grid-columns} * #{$i})!important
+        }
+    }
+}
+
+@mixin offset($prefix){
+    @for $i from 0 through 11 {
+        .offset#{$prefix}-#{$i}{
+            margin-left: calc(100% / #{$grid-columns} * #{$i})
+        }
+    }
+}
+
+
+
+@mixin gutters($prefix){
+    @each $i,$ratio in $gutters {
+        .gx#{$prefix}-#{$i}, .g#{$prefix}-#{$i} {
+            --gutter-x: #{$grid-gutter-width * $ratio};
+        }
+        .gy#{$prefix}-#{$i},.g#{$prefix}-#{$i}{
+            --gutter-y: #{$grid-gutter-width * $ratio};
+        }
+    }
+}
+
+@mixin col-by-real-size($prefix) {
+    .row-flex#{$prefix}-0 > *{
+        flex: 0 0;
+    }
+}
+
+// container
+.container {
+    @extend %container-base;
+    max-width: 1370px;
+    // will change later
+    padding-left: calc(var(--gutter-x) / 2); 
+    padding-right: calc(var(--gutter-x) / 2); 
+    
+    &-fluid {
+        @extend %container-base;
+    }
+}
+.row {
+    display: flex; flex-wrap: wrap;
+    margin-left: calc(var(--gutter-x) / -2); 
+    margin-right: calc(var(--gutter-x) / -2); 
+    margin-top: calc(var(--gutter-y) / -1); 
+    & > * {
+        flex: 1 0;
+        padding-left: calc(var(--gutter-x) / 2); 
+        padding-right: calc(var(--gutter-x) / 2);
+        margin-top: calc(var(--gutter-y)); 
+    }
+}
+
+@each $bp, $mw in $grid-breakpoints {
+    @include addResponsive($bp, $mw) {
+        .container {
+            max-width: #{map-get($container-max-widths, $bp)};
+        }
+        
+        $prefix: if($bp==xs,'',"-#{$bp}");
+        
+        @include row-cols($prefix);
+        @include col($prefix);
+        @include offset($prefix);
+        @include gutters($prefix);
+        @include col-by-real-size($prefix);
+    }
+}
