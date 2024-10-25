@@ -14,8 +14,11 @@
     <!-- swiper -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="./../assets/js/general.js"></script>
+    <script src="./../assets/js/date.js"></script>
 </head>
 <body>
+    <button class="switch-theme">theme: dark</button>
     <header>
         <div class="container">
             <p>made with love by shinsouhitoshi1203</p>
@@ -28,7 +31,7 @@
                 <h1>datepicker.calendar</h1>
             </article>
             <form class="form" id="form-33444">
-                <div class="form__input date" data-input="date">
+                <div class="form__input date" data-input="date" data-date="null">
                     <div class="form__box date__box">
                         <!-- <div class="form__date-edit"></div> -->
                         <div class="hover-bg"></div>
@@ -44,8 +47,7 @@
                         </div>
 
                     </div>
-
-                    <div class="date__calendar calendar" type="minified">
+                    <div class="date__calendar calendar" type="minified" >
                         <div class="calendar__main">
                             <div class="calendar__header d-flex ai-center jc-space-between">
                                 <button class="button fs-14 fw-600 calendar__move">December 2024</button>
