@@ -1,9 +1,9 @@
-var $ = document.querySelector.bind(document);
-var $$ = document.querySelectorAll.bind(document);
+let $ = document.querySelector.bind(document);
+let $$ = document.querySelectorAll.bind(document);
+
 function switchTheme () {
     $(".switch-theme").addEventListener("click", function () {
         const theme = $("html").getAttribute("data-theme");
-        console.log(theme);
         const newTheme = theme=="dark"?"light":"dark";
         $("html").setAttribute("data-theme",newTheme);
         this.innerText = `theme: ${newTheme}`;
@@ -20,6 +20,35 @@ function fuckForm () {
         }
     )
 }
+
+
+function findParent(input, target, limit = 10) {
+    let objInput, i = 1;
+    // find object is objInput
+    switch (typeof objInput) {
+        case "string":
+            let tmp = (input[0]==".")?input:"."+input;
+            objInput = $(tmp);
+            break;
+    
+        default:
+            objInput = objInput;
+            break;
+    }
+    // configure target
+    let objTarget = (target[0]==".")?target:"."+target;
+    try {
+        if (objInput===undefined) throw new Error(`Can't find the parent as the input is invalid `)
+        while (!objInput.matches(objTarget) ) {
+            objInput = objInput.parentNode; i++;
+            if (i>limit) throw new Error(`Can't find the parent: ${objTarget} from ${""+objInput}`)
+        }
+        return objInput; 
+    } catch (error) {
+        console.log(error.message)
+        return false;
+    }    
+} 
 
 document.addEventListener("DOMContentLoaded", () => {
     switchTheme(); fuckForm();

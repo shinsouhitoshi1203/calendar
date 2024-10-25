@@ -2038,9 +2038,13 @@ header {
   padding: 20px;
   position: absolute;
   margin-top: 10px;
+  display: none;
 }
 .calendar * {
   color: inherit;
+}
+.date[data-display-calendar=true] .calendar {
+  display: block;
 }
 
 .calendar__header {

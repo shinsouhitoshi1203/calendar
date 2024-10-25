@@ -5,7 +5,11 @@
     padding: 20px;
     position: absolute; margin-top: 10px;
     * {color: inherit}
+
+    display: none;
     
+    // events javascripts;
+    .date[data-display-calendar=true] & {display: block;}
 }
 
 // calendar >> header;
