@@ -8,6 +8,7 @@ html[data-theme="light"]{
     --text-caption: #121212;
     --text-disabled: #858585;
     --icon-filter: initial;
+    --icon-hover: brightness(0) saturate(100%) invert(45%) sepia(68%) saturate(5611%) hue-rotate(225deg) brightness(98%) contrast(93%);
     --icon-disabled: brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(28%) hue-rotate(139deg) brightness(96%) contrast(90%);
     
     // components
