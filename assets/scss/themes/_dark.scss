@@ -27,9 +27,10 @@ html[data-theme="dark"]{
         --form-caption-disable: var(--text-disabled);
     
         // calendar
-        --day-text-in-month: #a0a0a0; 
+        --day-text-in-month: #a0a0a0;//#858585
         --day-text-hover: #ffffff;
         --day-text-outside: #232323;
+        --day-bg-hover: #2F2F2F;
     // page: 
         // demo.html
     }

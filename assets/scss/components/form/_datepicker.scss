@@ -3,7 +3,7 @@
 .date {
     &__box {
         border-radius: a.$form-bdrs; border: 1px solid var(--form-bd);
-        width: a.$form-w-default; padding: 8px 20px; 
+        width: a.$form-w-default; padding: 8px 20px; display: block;
         cursor: pointer; transition: background .3s, border-color .3s; 
         background: var(--form-bg);
         &:hover {

@@ -2036,6 +2036,7 @@ header {
   width: 265px;
   border-radius: 8px;
   padding: 20px;
+  z-index: 100;
   position: absolute;
   margin-top: 10px;
   display: none;
@@ -2043,7 +2044,7 @@ header {
 .calendar * {
   color: inherit;
 }
-.date[data-display-calendar=true] .calendar {
+.form__input--focus .calendar {
   display: block;
 }
 
@@ -2068,10 +2069,6 @@ header {
 .calendar__move {
   font-family: "aptos", system-ui, sans-serif;
   padding: 0 6px;
-  margin-left: -6px;
-}
-.calendar__row {
-  margin-left: -6px;
 }
 .calendar__row > * {
   display: flex;
@@ -2093,7 +2090,7 @@ header {
   color: var(--day-text-in-month);
 }
 .day:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--day-bg-hover);
   color: var(--day-text-hover);
 }
 .day-outside {
@@ -2101,10 +2098,11 @@ header {
 }
 .day-selected {
   background: #5865F2;
-  color: var(--day-text-hover);
+  color: #FFFFFF;
 }
 .day-selected:hover {
   background: #131FA3;
+  color: #FFF;
 }
 
 .date__box {
@@ -2112,9 +2110,17 @@ header {
   border: 1px solid var(--form-bd);
   width: 265px;
   padding: 8px 20px;
+  display: block;
   cursor: pointer;
   transition: background 0.3s, border-color 0.3s;
   background: var(--form-bg);
+}
+.date__box-focus {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .date__box:hover {
   background: var(--form-bg-hover);
@@ -2151,6 +2157,9 @@ header {
 .form__active .form__box {
   border-color: var(--form-bd-active);
 }
+.form__input--focus {
+  display: block;
+}
 
 .webpage__icon {
   filter: var(--icon);
@@ -2186,6 +2195,10 @@ html[data-theme=light] {
   --form-bd-error:#ff0000;
   --form-bd-active: #5865F2;
   --form-caption-disable: var(--text-disabled);
+  --day-text-in-month: #858585;
+  --day-text-hover: #232323;
+  --day-text-outside: #c9c9c9;
+  --day-bg-hover: #F1F2FF;
 }
 
 html[data-theme=dark] {
@@ -2208,6 +2221,7 @@ html[data-theme=dark] {
   --day-text-in-month: #a0a0a0;
   --day-text-hover: #ffffff;
   --day-text-outside: #232323;
+  --day-bg-hover: #2F2F2F;
 }
 
 /*# sourceMappingURL=main.css.map */
