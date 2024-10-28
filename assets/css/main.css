@@ -2036,6 +2036,7 @@ header {
   width: 265px;
   border-radius: 8px;
   padding: 20px;
+  z-index: 100;
   position: absolute;
   margin-top: 10px;
   display: none;
@@ -2043,7 +2044,7 @@ header {
 .calendar * {
   color: inherit;
 }
-.date[data-display-calendar=true] .calendar {
+.form__input--focus .calendar {
   display: block;
 }
 
@@ -2112,9 +2113,17 @@ header {
   border: 1px solid var(--form-bd);
   width: 265px;
   padding: 8px 20px;
+  display: block;
   cursor: pointer;
   transition: background 0.3s, border-color 0.3s;
   background: var(--form-bg);
+}
+.date__box-focus {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .date__box:hover {
   background: var(--form-bg-hover);
@@ -2150,6 +2159,9 @@ header {
 
 .form__active .form__box {
   border-color: var(--form-bd-active);
+}
+.form__input--focus {
+  display: block;
 }
 
 .webpage__icon {

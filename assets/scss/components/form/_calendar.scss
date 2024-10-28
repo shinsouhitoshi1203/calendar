@@ -2,14 +2,17 @@
 .calendar {
     background: var(--form-bg); box-shadow: var(--form-shadow);color: var(--form-caption);
     width: a.$form-w-default; border-radius: a.$form-bdrs;
-    padding: 20px;
+    padding: 20px; z-index: 100;
     position: absolute; margin-top: 10px;
     * {color: inherit}
 
     display: none;
     
     // events javascripts;
-    .date[data-display-calendar=true] & {display: block;}
+    .form__input--focus & {display: block;}
+
+    // sizes
+    // .swiper-wrapper--normal {height: 181px;}
 }
 
 // calendar >> header;

@@ -3,36 +3,71 @@ let $$ = document.querySelectorAll.bind(document);
 export default class DatePicker {
     
     #adjust() {
+        const _this = this
         function defaultVisibility(id) {
             $(`${id}`).setAttribute("data-display-calendar","false")
         }
+        function slider(id) {
+            _this.swip = new Swiper(`${id} .calendar__month`,{
+                direction: 'horizontal',
+                slidesPerView: 1,
+                autoHeight:true,
+                navigation: {
+                    nextEl: `${id} .calendar__navigate--next`,
+                    prevEl: `${id} .calendar__navigate--prev`,
+                },
+                on: {
+                    sliderFirstMove: function() {
+                        console.log(Math.random());
+                    }
+                }
+            })
+        }
         defaultVisibility(this.id);
+        slider(this.id);
     }
-    #runEvent() {
-        const id = this.id;
-        $(`${id} .date__box`).addEventListener("click",  (e)=>{
-            this.switchVisibility()
-        })
-    }
-
     switchVisibility(val = "") {
         const id = this.id;
-        if ($(id).getAttribute("data-display-calendar")!==undefined) {
-            if (typeof val=="string") {
-                if ($(id)?.getAttribute("data-display-calendar")=="true") {
-                    $(id)?.setAttribute("data-display-calendar","false")
+        // alert(11)
+        if ($(id)!==undefined) {
+            if (typeof(val)=="string") {
+                if ($(id)?.matches('.form__input--focus')) {
+                    $(id)?.classList.remove('form__input--focus');
                 } else {
-                    $(id)?.setAttribute("data-display-calendar","true")
+                    $(id)?.classList.add('form__input--focus');
                 }
             } else {
-                $(id)?.setAttribute("data-display-calendar",`${val}`);
+                if (val) {
+                    $(id)?.classList.add('form__input--focus');
+                } else {
+                    $(id)?.classList.remove('form__input--focus');
+                }
             }
         }
     }
-    
+    #runEvent() {
+        const id = this.id;
+        
+        $(`${id} .date__box`).addEventListener("click",  (e)=>{
+            $$('.form__input').forEach(el=>{
+                if (!el.matches(`${id}`)) el.classList.remove("form__input--focus");
+            })
+            this.switchVisibility();e.stopPropagation();
+        })
+
+        document.addEventListener("click", (e)=>{
+            console.log(e.target);
+            if (!e.target.matches(`${id} *`)) {
+                this.switchVisibility(false);
+            }
+        })
+    }
+
     constructor (formID, config) {
         this.id = formID;
         this.#adjust();
         this.#runEvent();
     }
 }
+
+// 181 and 222px

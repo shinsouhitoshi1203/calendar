@@ -7,4 +7,14 @@ document.addEventListener("DOMContentLoaded",()=>{
             
         }
     );
+    const date2 = new DatePicker(
+        "#form-55555-00000", {
+            
+        }
+    );
+    const date3 = new DatePicker(
+        "#form-1-00000", {
+            
+        }
+    );
 })

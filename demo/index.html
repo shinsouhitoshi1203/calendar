@@ -31,8 +31,10 @@
                 <h1>datepicker.calendar</h1>
             </article>
             <div class="form" id="form-33444">
-                <div class="form__input date" data-input="date" data-date="null" data-display-calendar="false" id="form-33444-00000">
+                <div class="form__input form__input--focus date" data-input="date" data-date="null" data-display-calendar="false" id="form-33444-00000">
+
                     <div class="form__box date__box">
+                        
                         <!-- <div class="form__date-edit"></div> -->
                         <div class="hover-bg"></div>
                         <div class="date__display">
@@ -45,17 +47,17 @@
                                 <img src="./../icons/arrow-down.svg" class="webpage__icon" alt="">
                             </div>
                         </div>
-
+                        
                     </div>
                     <div class="date__calendar calendar" type="minified" >
                         <div class="calendar__main">
                             <div class="calendar__header d-flex ai-center jc-space-between">
                                 <button class="button fs-14 fw-600 calendar__move">December 2024</button>
                                 <div class="calendar__navigate">
-                                    <button class="button button__blank" title="Previous month">
+                                    <button class="button button__blank calendar__navigate--prev" title="Previous month">
                                         <img src="./../icons/arrow-left.svg"  class="webpage__icon" alt="">
                                     </button>
-                                    <button class="button button__blank" title="Next month">
+                                    <button class="button button__blank calendar__navigate--next" title="Next month">
                                         <img src="./../icons/arrow-right.svg" class="webpage__icon" alt="">
                                     </button>
                                 </div>
@@ -74,45 +76,140 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
-                                            <div class="col day day-outside day-1">1</div>
-                                            <div class="col day day-outside day-2">2</div>
-                                            <div class="col day day-outside day-3">3</div>
-                                            <div class="col day day-outside day-4">4</div>
-                                            <div class="col day day-outside day-5">5</div>
-                                            <div class="col day day-6 day-selected">6</div>
-                                            <div class="col day day-7">7</div>
-                                            <div class="col day day-8">8</div>
-                                            <div class="col day day-9">9</div>
-                                            <div class="col day day-10">10</div>
-                                            <div class="col day day-11">11</div>
-                                            <div class="col day day-12">12</div>
-                                            <div class="col day day-13">13</div>
-                                            <div class="col day day-14">14</div>
-                                            <div class="col day day-15">15</div>
-                                            <div class="col day day-16">16</div>
-                                            <div class="col day day-17">17</div>
-                                            <div class="col day day-18">18</div>
-                                            <div class="col day day-19">19</div>
-                                            <div class="col day day-20">20</div>
-                                            <div class="col day day-21">21</div>
-                                            <div class="col day day-22">22</div>
-                                            <div class="col day day-23">23</div>
-                                            <div class="col day day-24">24</div>
-                                            <div class="col day day-25">25</div>
-                                            <div class="col day day-26">26</div>
-                                            <div class="col day day-27">27</div>
-                                            <div class="col day day-28">28</div>
-                                            <div class="col day day-29">29</div>
-                                            <div class="col day day-30">30</div>
-                                            <div class="col day day-31">31</div>
-                                            <div class="col day day-32">32</div>
-                                            <div class="col day day-33">33</div>
-                                            <div class="col day day-34">34</div>
-                                            <div class="col day day-outside day-35">35</div>
-                                            
+                                        <div class="swiper calendar__month">
+                                            <div class="swiper-wrapper swiper-wrapper--normal">
+                                                <div class="swiper-slide" data-node="2024.10">
+                                                    <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
+                                                        <div class="col day day-outside day-1">1</div>
+                                                        <div class="col day day-outside day-2">2</div>
+                                                        <div class="col day day-outside day-3">3</div>
+                                                        <div class="col day day-outside day-4">4</div>
+                                                        <div class="col day day-outside day-5">5</div>
+                                                        <div class="col day day-6 day-selected">6</div>
+                                                        <div class="col day day-7">7</div>
+                                                        <div class="col day day-8">8</div>
+                                                        <div class="col day day-9">9</div>
+                                                        <div class="col day day-10">10</div>
+                                                        <div class="col day day-11">11</div>
+                                                        <div class="col day day-12">12</div>
+                                                        <div class="col day day-13">13</div>
+                                                        <div class="col day day-14">14</div>
+                                                        <div class="col day day-15">15</div>
+                                                        <div class="col day day-16">16</div>
+                                                        <div class="col day day-17">17</div>
+                                                        <div class="col day day-18">18</div>
+                                                        <div class="col day day-19">19</div>
+                                                        <div class="col day day-20">20</div>
+                                                        <div class="col day day-21">21</div>
+                                                        <div class="col day day-22">22</div>
+                                                        <div class="col day day-23">23</div>
+                                                        <div class="col day day-24">24</div>
+                                                        <div class="col day day-25">25</div>
+                                                        <div class="col day day-26">26</div>
+                                                        <div class="col day day-27">27</div>
+                                                        <div class="col day day-28">28</div>
+                                                        <div class="col day day-29">29</div>
+                                                        <div class="col day day-30">30</div>
+                                                        <div class="col day day-31">31</div>
+                                                        <div class="col day day-32">32</div>
+                                                        <div class="col day day-33">33</div>
+                                                        <div class="col day day-34">34</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide" data-node="2024.11">
+                                                    <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
+                                                        <div class="col day day-outside day-1">1</div>
+                                                        <div class="col day day-outside day-2">2</div>
+                                                        <div class="col day day-outside day-3">3</div>
+                                                        <div class="col day day-outside day-4">4</div>
+                                                        <div class="col day day-outside day-5">5</div>
+                                                        <div class="col day day-6 day-selected">6</div>
+                                                        <div class="col day day-7">7</div>
+                                                        <div class="col day day-8">8</div>
+                                                        <div class="col day day-9">9</div>
+                                                        <div class="col day day-10">10</div>
+                                                        <div class="col day day-11">11</div>
+                                                        <div class="col day day-12">12</div>
+                                                        <div class="col day day-13">13</div>
+                                                        <div class="col day day-14">14</div>
+                                                        <div class="col day day-15">15</div>
+                                                        <div class="col day day-16">16</div>
+                                                        <div class="col day day-17">17</div>
+                                                        <div class="col day day-18">18</div>
+                                                        <div class="col day day-19">19</div>
+                                                        <div class="col day day-20">20</div>
+                                                        <div class="col day day-21">21</div>
+                                                        <div class="col day day-22">22</div>
+                                                        <div class="col day day-23">23</div>
+                                                        <div class="col day day-24">24</div>
+                                                        <div class="col day day-25">25</div>
+                                                        <div class="col day day-26">26</div>
+                                                        <div class="col day day-27">27</div>
+                                                        <div class="col day day-28">28</div>
+                                                        <div class="col day day-29">29</div>
+                                                        <div class="col day day-30">30</div>
+                                                        <div class="col day day-31">31</div>
+                                                        <div class="col day day-32">32</div>
+                                                        <div class="col day day-33">33</div>
+                                                        <div class="col day day-34">34</div>
+                                                        <div class="col day day-outside day-35">35</div>
+
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide" data-node="2024.12">
+                                                    <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
+                                                        <div class="col day day-outside day-1">1</div>
+                                                        <div class="col day day-outside day-2">2</div>
+                                                        <div class="col day day-outside day-3">3</div>
+                                                        <div class="col day day-outside day-4">4</div>
+                                                        <div class="col day day-outside day-5">5</div>
+                                                        <div class="col day day-6 day-selected">6</div>
+                                                        <div class="col day day-7">7</div>
+                                                        <div class="col day day-8">8</div>
+                                                        <div class="col day day-9">9</div>
+                                                        <div class="col day day-10">10</div>
+                                                        <div class="col day day-11">11</div>
+                                                        <div class="col day day-12">12</div>
+                                                        <div class="col day day-13">13</div>
+                                                        <div class="col day day-14">14</div>
+                                                        <div class="col day day-15">15</div>
+                                                        <div class="col day day-16">16</div>
+                                                        <div class="col day day-17">17</div>
+                                                        <div class="col day day-18">18</div>
+                                                        <div class="col day day-19">19</div>
+                                                        <div class="col day day-20">20</div>
+                                                        <div class="col day day-21">21</div>
+                                                        <div class="col day day-22">22</div>
+                                                        <div class="col day day-23">23</div>
+                                                        <div class="col day day-24">24</div>
+                                                        <div class="col day day-25">25</div>
+                                                        <div class="col day day-26">26</div>
+                                                        <div class="col day day-27">27</div>
+                                                        <div class="col day day-28">28</div>
+                                                        <div class="col day day-29">29</div>
+                                                        <div class="col day day-30">30</div>
+                                                        <div class="col day day-31">31</div>
+                                                        <div class="col day day-32">32</div>
+                                                        <div class="col day day-33">33</div>
+                                                        <div class="col day day-34">34</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                             
@@ -121,7 +218,387 @@
                 </div>
                 
             </div>
+
+
+            <div class="form" id="form-55555">
+                <div class="form__input  date" data-input="date" data-date="null" data-display-calendar="false" id="form-55555-00000">
+
+                    <div class="form__box date__box">
+                        
+                        <!-- <div class="form__date-edit"></div> -->
+                        <div class="hover-bg"></div>
+                        <div class="date__display">
+                            <i class="fa-regular fa-calendar"></i>
+                            <div class="date__txt">
+                                <p class="date__txt-caption fs-10">Select a date</p>
+                                <p class="date__txt-real fw-700 fs-16">2021.09.22</p>
+                            </div>
+                            <div class="date__dd">
+                                <img src="./../icons/arrow-down.svg" class="webpage__icon" alt="">
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="date__calendar calendar" type="minified" >
+                        <div class="calendar__main">
+                            <div class="calendar__header d-flex ai-center jc-space-between">
+                                <button class="button fs-14 fw-600 calendar__move">December 2024</button>
+                                <div class="calendar__navigate">
+                                    <button class="button button__blank calendar__navigate--prev" title="Previous month">
+                                        <img src="./../icons/arrow-left.svg"  class="webpage__icon" alt="">
+                                    </button>
+                                    <button class="button button__blank calendar__navigate--next" title="Next month">
+                                        <img src="./../icons/arrow-right.svg" class="webpage__icon" alt="">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="calendar__container">
+                                <div class="row row-cols-1 calendar__table">
+                                    <div class="col">
+                                        <div class="calendar__row row gx-0 gy-0 row-cols-7" calendar-cell="day-week">
+                                            <div class="col">Sun</div>
+                                            <div class="col">Mon</div>
+                                            <div class="col">Tue</div>
+                                            <div class="col">Wed</div>
+                                            <div class="col">Thu</div>
+                                            <div class="col">Fri</div>
+                                            <div class="col">Sat</div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="swiper calendar__month">
+                                            <div class="swiper-wrapper swiper-wrapper--normal">
+                                                <div class="swiper-slide" data-node="2024.10">
+                                                    <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
+                                                        <div class="col day day-outside day-1">1</div>
+                                                        <div class="col day day-outside day-2">2</div>
+                                                        <div class="col day day-outside day-3">3</div>
+                                                        <div class="col day day-outside day-4">4</div>
+                                                        <div class="col day day-outside day-5">5</div>
+                                                        <div class="col day day-6 day-selected">6</div>
+                                                        <div class="col day day-7">7</div>
+                                                        <div class="col day day-8">8</div>
+                                                        <div class="col day day-9">9</div>
+                                                        <div class="col day day-10">10</div>
+                                                        <div class="col day day-11">11</div>
+                                                        <div class="col day day-12">12</div>
+                                                        <div class="col day day-13">13</div>
+                                                        <div class="col day day-14">14</div>
+                                                        <div class="col day day-15">15</div>
+                                                        <div class="col day day-16">16</div>
+                                                        <div class="col day day-17">17</div>
+                                                        <div class="col day day-18">18</div>
+                                                        <div class="col day day-19">19</div>
+                                                        <div class="col day day-20">20</div>
+                                                        <div class="col day day-21">21</div>
+                                                        <div class="col day day-22">22</div>
+                                                        <div class="col day day-23">23</div>
+                                                        <div class="col day day-24">24</div>
+                                                        <div class="col day day-25">25</div>
+                                                        <div class="col day day-26">26</div>
+                                                        <div class="col day day-27">27</div>
+                                                        <div class="col day day-28">28</div>
+                                                        <div class="col day day-29">29</div>
+                                                        <div class="col day day-30">30</div>
+                                                        <div class="col day day-31">31</div>
+                                                        <div class="col day day-32">32</div>
+                                                        <div class="col day day-33">33</div>
+                                                        <div class="col day day-34">34</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide" data-node="2024.11">
+                                                    <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
+                                                        <div class="col day day-outside day-1">1</div>
+                                                        <div class="col day day-outside day-2">2</div>
+                                                        <div class="col day day-outside day-3">3</div>
+                                                        <div class="col day day-outside day-4">4</div>
+                                                        <div class="col day day-outside day-5">5</div>
+                                                        <div class="col day day-6 day-selected">6</div>
+                                                        <div class="col day day-7">7</div>
+                                                        <div class="col day day-8">8</div>
+                                                        <div class="col day day-9">9</div>
+                                                        <div class="col day day-10">10</div>
+                                                        <div class="col day day-11">11</div>
+                                                        <div class="col day day-12">12</div>
+                                                        <div class="col day day-13">13</div>
+                                                        <div class="col day day-14">14</div>
+                                                        <div class="col day day-15">15</div>
+                                                        <div class="col day day-16">16</div>
+                                                        <div class="col day day-17">17</div>
+                                                        <div class="col day day-18">18</div>
+                                                        <div class="col day day-19">19</div>
+                                                        <div class="col day day-20">20</div>
+                                                        <div class="col day day-21">21</div>
+                                                        <div class="col day day-22">22</div>
+                                                        <div class="col day day-23">23</div>
+                                                        <div class="col day day-24">24</div>
+                                                        <div class="col day day-25">25</div>
+                                                        <div class="col day day-26">26</div>
+                                                        <div class="col day day-27">27</div>
+                                                        <div class="col day day-28">28</div>
+                                                        <div class="col day day-29">29</div>
+                                                        <div class="col day day-30">30</div>
+                                                        <div class="col day day-31">31</div>
+                                                        <div class="col day day-32">32</div>
+                                                        <div class="col day day-33">33</div>
+                                                        <div class="col day day-34">34</div>
+                                                        <div class="col day day-outside day-35">35</div>
+
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide" data-node="2024.12">
+                                                    <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
+                                                        <div class="col day day-outside day-1">1</div>
+                                                        <div class="col day day-outside day-2">2</div>
+                                                        <div class="col day day-outside day-3">3</div>
+                                                        <div class="col day day-outside day-4">4</div>
+                                                        <div class="col day day-outside day-5">5</div>
+                                                        <div class="col day day-6 day-selected">6</div>
+                                                        <div class="col day day-7">7</div>
+                                                        <div class="col day day-8">8</div>
+                                                        <div class="col day day-9">9</div>
+                                                        <div class="col day day-10">10</div>
+                                                        <div class="col day day-11">11</div>
+                                                        <div class="col day day-12">12</div>
+                                                        <div class="col day day-13">13</div>
+                                                        <div class="col day day-14">14</div>
+                                                        <div class="col day day-15">15</div>
+                                                        <div class="col day day-16">16</div>
+                                                        <div class="col day day-17">17</div>
+                                                        <div class="col day day-18">18</div>
+                                                        <div class="col day day-19">19</div>
+                                                        <div class="col day day-20">20</div>
+                                                        <div class="col day day-21">21</div>
+                                                        <div class="col day day-22">22</div>
+                                                        <div class="col day day-23">23</div>
+                                                        <div class="col day day-24">24</div>
+                                                        <div class="col day day-25">25</div>
+                                                        <div class="col day day-26">26</div>
+                                                        <div class="col day day-27">27</div>
+                                                        <div class="col day day-28">28</div>
+                                                        <div class="col day day-29">29</div>
+                                                        <div class="col day day-30">30</div>
+                                                        <div class="col day day-31">31</div>
+                                                        <div class="col day day-32">32</div>
+                                                        <div class="col day day-33">33</div>
+                                                        <div class="col day day-34">34</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form" id="form-1">
+                <div class="form__input  date" data-input="date" data-date="null" data-display-calendar="false" id="form-1-00000">
+
+                    <div class="form__box date__box">
+                        
+                        <!-- <div class="form__date-edit"></div> -->
+                        <div class="hover-bg"></div>
+                        <div class="date__display">
+                            <i class="fa-regular fa-calendar"></i>
+                            <div class="date__txt">
+                                <p class="date__txt-caption fs-10">Select a date</p>
+                                <p class="date__txt-real fw-700 fs-16">2021.09.22</p>
+                            </div>
+                            <div class="date__dd">
+                                <img src="./../icons/arrow-down.svg" class="webpage__icon" alt="">
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="date__calendar calendar" type="minified" >
+                        <div class="calendar__main">
+                            <div class="calendar__header d-flex ai-center jc-space-between">
+                                <button class="button fs-14 fw-600 calendar__move">December 2024</button>
+                                <div class="calendar__navigate">
+                                    <button class="button button__blank calendar__navigate--prev" title="Previous month">
+                                        <img src="./../icons/arrow-left.svg"  class="webpage__icon" alt="">
+                                    </button>
+                                    <button class="button button__blank calendar__navigate--next" title="Next month">
+                                        <img src="./../icons/arrow-right.svg" class="webpage__icon" alt="">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="calendar__container">
+                                <div class="row row-cols-1 calendar__table">
+                                    <div class="col">
+                                        <div class="calendar__row row gx-0 gy-0 row-cols-7" calendar-cell="day-week">
+                                            <div class="col">Sun</div>
+                                            <div class="col">Mon</div>
+                                            <div class="col">Tue</div>
+                                            <div class="col">Wed</div>
+                                            <div class="col">Thu</div>
+                                            <div class="col">Fri</div>
+                                            <div class="col">Sat</div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="swiper calendar__month">
+                                            <div class="swiper-wrapper swiper-wrapper--normal">
+                                                <div class="swiper-slide" data-node="2024.10">
+                                                    <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
+                                                        <div class="col day day-outside day-1">1</div>
+                                                        <div class="col day day-outside day-2">2</div>
+                                                        <div class="col day day-outside day-3">3</div>
+                                                        <div class="col day day-outside day-4">4</div>
+                                                        <div class="col day day-outside day-5">5</div>
+                                                        <div class="col day day-6 day-selected">6</div>
+                                                        <div class="col day day-7">7</div>
+                                                        <div class="col day day-8">8</div>
+                                                        <div class="col day day-9">9</div>
+                                                        <div class="col day day-10">10</div>
+                                                        <div class="col day day-11">11</div>
+                                                        <div class="col day day-12">12</div>
+                                                        <div class="col day day-13">13</div>
+                                                        <div class="col day day-14">14</div>
+                                                        <div class="col day day-15">15</div>
+                                                        <div class="col day day-16">16</div>
+                                                        <div class="col day day-17">17</div>
+                                                        <div class="col day day-18">18</div>
+                                                        <div class="col day day-19">19</div>
+                                                        <div class="col day day-20">20</div>
+                                                        <div class="col day day-21">21</div>
+                                                        <div class="col day day-22">22</div>
+                                                        <div class="col day day-23">23</div>
+                                                        <div class="col day day-24">24</div>
+                                                        <div class="col day day-25">25</div>
+                                                        <div class="col day day-26">26</div>
+                                                        <div class="col day day-27">27</div>
+                                                        <div class="col day day-28">28</div>
+                                                        <div class="col day day-29">29</div>
+                                                        <div class="col day day-30">30</div>
+                                                        <div class="col day day-31">31</div>
+                                                        <div class="col day day-32">32</div>
+                                                        <div class="col day day-33">33</div>
+                                                        <div class="col day day-34">34</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide" data-node="2024.11">
+                                                    <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
+                                                        <div class="col day day-outside day-1">1</div>
+                                                        <div class="col day day-outside day-2">2</div>
+                                                        <div class="col day day-outside day-3">3</div>
+                                                        <div class="col day day-outside day-4">4</div>
+                                                        <div class="col day day-outside day-5">5</div>
+                                                        <div class="col day day-6 day-selected">6</div>
+                                                        <div class="col day day-7">7</div>
+                                                        <div class="col day day-8">8</div>
+                                                        <div class="col day day-9">9</div>
+                                                        <div class="col day day-10">10</div>
+                                                        <div class="col day day-11">11</div>
+                                                        <div class="col day day-12">12</div>
+                                                        <div class="col day day-13">13</div>
+                                                        <div class="col day day-14">14</div>
+                                                        <div class="col day day-15">15</div>
+                                                        <div class="col day day-16">16</div>
+                                                        <div class="col day day-17">17</div>
+                                                        <div class="col day day-18">18</div>
+                                                        <div class="col day day-19">19</div>
+                                                        <div class="col day day-20">20</div>
+                                                        <div class="col day day-21">21</div>
+                                                        <div class="col day day-22">22</div>
+                                                        <div class="col day day-23">23</div>
+                                                        <div class="col day day-24">24</div>
+                                                        <div class="col day day-25">25</div>
+                                                        <div class="col day day-26">26</div>
+                                                        <div class="col day day-27">27</div>
+                                                        <div class="col day day-28">28</div>
+                                                        <div class="col day day-29">29</div>
+                                                        <div class="col day day-30">30</div>
+                                                        <div class="col day day-31">31</div>
+                                                        <div class="col day day-32">32</div>
+                                                        <div class="col day day-33">33</div>
+                                                        <div class="col day day-34">34</div>
+                                                        <div class="col day day-outside day-35">35</div>
+
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide" data-node="2024.12">
+                                                    <div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">
+                                                        <div class="col day day-outside day-1">1</div>
+                                                        <div class="col day day-outside day-2">2</div>
+                                                        <div class="col day day-outside day-3">3</div>
+                                                        <div class="col day day-outside day-4">4</div>
+                                                        <div class="col day day-outside day-5">5</div>
+                                                        <div class="col day day-6 day-selected">6</div>
+                                                        <div class="col day day-7">7</div>
+                                                        <div class="col day day-8">8</div>
+                                                        <div class="col day day-9">9</div>
+                                                        <div class="col day day-10">10</div>
+                                                        <div class="col day day-11">11</div>
+                                                        <div class="col day day-12">12</div>
+                                                        <div class="col day day-13">13</div>
+                                                        <div class="col day day-14">14</div>
+                                                        <div class="col day day-15">15</div>
+                                                        <div class="col day day-16">16</div>
+                                                        <div class="col day day-17">17</div>
+                                                        <div class="col day day-18">18</div>
+                                                        <div class="col day day-19">19</div>
+                                                        <div class="col day day-20">20</div>
+                                                        <div class="col day day-21">21</div>
+                                                        <div class="col day day-22">22</div>
+                                                        <div class="col day day-23">23</div>
+                                                        <div class="col day day-24">24</div>
+                                                        <div class="col day day-25">25</div>
+                                                        <div class="col day day-26">26</div>
+                                                        <div class="col day day-27">27</div>
+                                                        <div class="col day day-28">28</div>
+                                                        <div class="col day day-29">29</div>
+                                                        <div class="col day day-30">30</div>
+                                                        <div class="col day day-31">31</div>
+                                                        <div class="col day day-32">32</div>
+                                                        <div class="col day day-33">33</div>
+                                                        <div class="col day day-34">34</div>
+                                                        <div class="col day day-outside day-35">35</div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </body>
 </html>
+
+
