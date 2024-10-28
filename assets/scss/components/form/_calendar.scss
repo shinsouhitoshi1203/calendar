@@ -26,9 +26,9 @@
         }
 
     }
-    &__move {font-family: a.$normal; padding: 0 6px; margin-left: -6px; }
+    &__move {font-family: a.$normal; padding: 0 6px; }
     &__row {
-        margin-left: -6px;
+        // margin-left: -6px;
         & > * {@include a.flex(); font-size: 1.2rem; aspect-ratio: 1 / 1;}
         
     }
@@ -37,10 +37,10 @@
 
 .day {
     cursor: pointer; transition: .3s;border-radius: 8px; color: var(--day-text-in-month);
-    &:hover {background: rgba(0 0 0 / 0.3); color: var(--day-text-hover);}
+    &:hover {background: var(--day-bg-hover); color: var(--day-text-hover);}
     &-outside {color: var(--day-text-outside)}
     &-selected {
-        background: #5865F2; color: var(--day-text-hover);
-        &:hover{background: #131FA3}
+        background: #5865F2; color: #FFFFFF;
+        &:hover{background: #131FA3; color: #FFF}
     }
 }

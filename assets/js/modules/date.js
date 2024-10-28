@@ -16,10 +16,9 @@ export default class DatePicker {
                     nextEl: `${id} .calendar__navigate--next`,
                     prevEl: `${id} .calendar__navigate--prev`,
                 },
+                spaceBetween: 25,
                 on: {
-                    sliderFirstMove: function() {
-                        console.log(Math.random());
-                    }
+                    
                 }
             })
         }
@@ -47,7 +46,7 @@ export default class DatePicker {
     }
     #runEvent() {
         const id = this.id;
-        
+        const _this = this;
         $(`${id} .date__box`).addEventListener("click",  (e)=>{
             $$('.form__input').forEach(el=>{
                 if (!el.matches(`${id}`)) el.classList.remove("form__input--focus");
@@ -58,12 +57,26 @@ export default class DatePicker {
         document.addEventListener("click", (e)=>{
             console.log(e.target);
             if (!e.target.matches(`${id} *`)) {
-                this.switchVisibility(false);
+                if (this.drag) {
+                    this.drag = false
+                } else {
+                    this.switchVisibility(false); 
+                }
             }
         })
+        this.swip.on("sliderFirstMove", ()=>{
+            this.drag = true;
+            console.log(Math.random());
+            console.log(_this.swip.activeIndex)
+        })
+        
     }
 
+    jump() {
+        this.swip.slideTo(1); // test
+    }
     constructor (formID, config) {
+        this.drag = false;
         this.id = formID;
         this.#adjust();
         this.#runEvent();
