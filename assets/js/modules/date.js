@@ -60,17 +60,14 @@ export default class DatePicker {
         }
     }
 
-    loadMonth([yyyy,mm,daySelected]) {
-        yyyy = yyyy*1; mm = mm*1;
+    loadMonth([yyyy,mm,daySelected], dir="next") {
         const _this = this;
-        let hash = `${yyyy}.${mm<10?'0'+mm+"":mm}`;
-        let cal = new Date(`${yyyy}-${mm}-01`);
-        let start = (cal.getDay());
-        let numberDay = this.dates[mm]();
-        // set the text of calendar's header
-        $(`${this.id} .calendar__move`).innerText = this.months[mm]+" "+yyyy;
 
-        function monthRender(start, numberDay) {
+        if (!["prev", "next"].includes(dir)) {
+            throw new Error ("co loi xay ra. fuck you")
+        }
+
+        function monthRender(start, numberDay, hash) {
             let raw = "";
             // load from previous month
             if (start > 0) {
@@ -104,17 +101,62 @@ export default class DatePicker {
                     raw += `<div class="col day day-outside">${cnt}</div>\n`;
                 } 
             }
-            const htmls = `<div class="swiper-slide" data-node="${hash}"><div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">${raw}</div></div>`
+            const htmls = `<div class="swiper-slide" data-legit="true" data-node="${hash}"><div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">${raw}</div></div>`
             return htmls;
         }
 
-        this.swip.appendSlide(monthRender(start, numberDay));
+        function renderDynamic([yyyy,mm]) {
+            let hash = _this.hashToString([yyyy,mm]);
+            let cal = new Date(`${yyyy}-${mm}-01`);
+            let start = (cal.getDay());
+            let numberDay = _this.dates[mm](yyyy);
+    
+            return monthRender(start, numberDay, hash);
+        }
+
+
+        yyyy = yyyy*1; mm = mm*1;
+
+        // let hash = this.hashToString([yyyy,mm]);
+        // let cal = new Date(`${yyyy}-${mm}-01`);
+
+        // let start = (cal.getDay());
+        // let numberDay = this.dates[mm]();
+
+        // let htmls = monthRender(start, numberDay, hash);
+
+
+        if (dir=="next") {
+            // insert a node and prev one
+            let htmls = renderDynamic([yyyy,mm])
+            this.swip.appendSlide(htmls);
+
+
+
+            const [yM, mM] = this.prev([yyyy,mm]);
+            htmls = renderDynamic([yM,mM])
+            if (!this.isExist([yM, mM])) this.swip.prependSlide(htmls);
+
+        } else if (dir=="prev") {
+            let htmls = renderDynamic([yyyy,mm])
+            this.swip.prependSlide(htmls);
+
+            if (this.swip.realIndex==0) {
+                //fakeNode.insertAdjacentHTML("afterend",htmls)
+            } else {
+
+            }
+            //const fakeNode = $(`${this.id} .swiper-slide[data-legit="false"]`);
+            
+            // this.swip.addSlide(1,htmls);
+            //this.swip.updateSlides();
+            // this.swip.slideTo(2)
+        } 
     }
     isExist([yyyy,mm]) {
         const hash = this.hashToString([yyyy,mm])
-        console.log(`${this.id} .swiper-slide[data-node="${hash}"]`,hash);
         const element = $(`${this.id} .swiper-slide[data-node="${hash}"]`);
-        if (  element != null ) {
+        if (  element!=null ) {
             return true;
         } else {
             return false;
@@ -129,7 +171,7 @@ export default class DatePicker {
         let currentYYMM = retrieveCurrent();
         const hash = $(`${this.id}`).getAttribute("data-date");
         // fill the calendar
-        if ($$(`${this.id} .swiper-slide`).length==0) {
+        if ($$(`${this.id} .swiper-slide[data-legit="true"]`).length==0) {
             // completely new 
 
             if (this.match(hash)) {
@@ -151,7 +193,6 @@ export default class DatePicker {
                 // create object
                 if (!this.isExist(currentYYMM)) {
                     let currentYYMM = retrieveCurrent();
-                    console.log(currentYYMM)
                     this.loadMonth(currentYYMM);
                 } else {
                     // navigate to the slide (will do later)
@@ -170,17 +211,26 @@ export default class DatePicker {
     #runEvent() {
         const id = this.id;
         const _this = this;
+
+
         $(`${id} .date__box`).addEventListener("click",  (e)=>{
+
+            // "onblur" event copycat [pt.1]
             $$('.form__input').forEach(el=>{
                 if (!el.matches(`${id}`)) el.classList.remove("form__input--focus");
             })
+
             this.switchVisibility();
 
             this.openCalendar();
+            // skip the blank slide(temp)
+            this.swip.slideTo(1)
+            this.#updateHeaderText();
 
             e.stopPropagation();
         })
 
+        // "onblur" event copycat [pt.2]
         document.addEventListener("click", (e)=>{
             console.log(e.target);
             if (!e.target.matches(`${id} *`)) {
@@ -191,30 +241,82 @@ export default class DatePicker {
                 }
             }
         })
-        this.swip.on("sliderFirstMove", ()=>{
+
+        this.swip.on("slideChange", (a)=>{
+            this.#updateHeaderText();
+        });
+
+        this.swip.on("touchEnd", (a)=>{
+
+            function move(dir) {
+                if (!["next", "prev"].includes(dir)) throw new Error ("Fuck you, donkey!");
+
+                const curSlide = _this.swip.slides[_this.swip.realIndex];
+                const curNode = curSlide.getAttribute("data-node").split(".");
+                const targetNode = _this.prev((curNode));
+                console.log("FUCK", targetNode)
+                if (!_this.isExist(targetNode)) {
+                    _this.loadMonth(targetNode, dir);
+                } 
+
+            }
+
+            setTimeout(()=>{move("prev")},0)
+            // this.#updateHeaderText();
+        });
+        this.swip.on("sliderFirstMove", (a)=>{
             this.drag = true;
-            console.log(Math.random());
-            console.log(_this.swip.slides[_this.swip.realIndex])
+
+            function move(dir) {
+                if (!["next", "prev"].includes(dir)) throw new Error ("Fuck you, donkey!");
+
+                const curSlide = _this.swip.slides[_this.swip.realIndex];
+                const curNode = curSlide.getAttribute("data-node").split(".");
+                const targetNode = (dir=="prev")?_this.prev(curNode):_this.next(curNode);
+                if (!_this.isExist(targetNode)) {
+                    _this.loadMonth(targetNode, dir);
+                } 
+
+            }
+
+            if (a.touches.diff > 0 ) {
+                // clone the previous month 
+                console.log("prev"); 
+                //move("prev");
+            } else {
+                // clone the next month
+                console.log("next");
+                move("next");
+            }
         })
-        this.swip.on("sliderMove", (a,b)=> {
-            if (this.posX!=null) {
+
+
+        this.swip.on("sliderMove", (a)=> {
+            /* if (this.posX!=null) {
                 if (this.posX > b.pageX) console.log("left"); else console.log("right");
                 this.posX = b.pageX
             } else {
                 this.posX = b.pageX
             }
-            console.log(b.pageX)
+            console.log(b.pageX) */
         })
         
     }
     jump() {
         this.swip.slideTo(1); // test
     }
-
+    #updateHeaderText() {
+        const dataNode = this.getMeta(this.getCurrentSlide()).dataNode;
+        let [yyyy,mm] = this.hashSplit(dataNode);
+        console.log(yyyy,mm);
+        $(`${this.id} .calendar__move`).innerText = this.months[mm]+" "+yyyy;
+    }
     next([yyyy,mm]) {
+        yyyy = Number.parseInt(yyyy); mm = Number.parseInt(mm);
         return (mm==12)?[yyyy+1,1]:[yyyy, mm+1];
     }
     prev([yyyy,mm]) {
+        yyyy = Number.parseInt(yyyy); mm = Number.parseInt(mm);
         return (mm==1)?[yyyy-1,12]:[yyyy, mm-1];
     }
     match(hash) {
@@ -229,12 +331,43 @@ export default class DatePicker {
             return true;
         } else return false;
     }
-    hashToString([yyyy,mm]) {
-        return yyyy + "." + mm + "";
+    hashToString([yyyy,mm, dd]) {
+        if (dd===undefined) dd = 0;
+        if (!Number.isInteger(yyyy) || !Number.isInteger(mm) || !Number.isInteger(dd)) {
+            // who knows if a month include a day? so I included the dd check with triple and double if
+            if ((mm[0]==0) && (mm.length!=1)) ;else if (mm<10) mm = "0" + mm + "";
+
+            dd = (dd==0) ? "" : ( (dd<10)?(".0"+dd+""):("."+dd+"") ) ;
+            return `${yyyy}.${mm}${dd}`; 
+        } else {
+            if (mm<10) mm = "0" + mm + "";
+            dd = (dd==0) ? "" : ( (dd<10)?(".0"+dd+""):("."+dd+"") );
+
+            return `${yyyy}.${mm}${dd}`;
+        }
+    }
+    hashSplit(dataNode) {
+        const curNode = dataNode.split(".");
+        let yyyy = curNode[0]*1;
+        let mm = curNode[1]*1;
+        return [yyyy,mm];
     }
 
+    getCurrentSlide() {
+        return this.swip.slides[this.swip.realIndex];
+    }
+    getSlideFromNode(inputNode) {
+        return $(`${this.id} .swiper-slide[data-node="${hash}"]`);
+    }
+    getMeta(inputObj) {
+        if (inputObj.getAttribute("data-legit")=="false") inputObj = inputObj.nextSibling;
+        return {
+            obj: inputObj,
+            dataNode: inputObj.getAttribute("data-node")
+        }
+    }
     constructor (formID, config) {
-        this.drag = false;
+        this.drag = false; // use to prevent from closing calendar when dragging to out of the calendar
         this.id = formID;
         this.posX = null;
         // data
