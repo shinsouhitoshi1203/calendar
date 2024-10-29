@@ -1,8 +1,6 @@
 let $ = document.querySelector.bind(document);
 let $$ = document.querySelectorAll.bind(document);
 export default class DatePicker {
-    
-
     #adjust() {
         const _this = this;
         function defaultVisibility(id) {
@@ -39,7 +37,6 @@ export default class DatePicker {
         slider(this.id);
         modifyValue(this.id);
     }
-
     switchVisibility(val = "") {
         const id = this.id;
         // alert(11)
@@ -59,7 +56,6 @@ export default class DatePicker {
             }
         }
     }
-
     loadMonth([yyyy,mm,daySelected], dir="next") {
         const _this = this;
 
@@ -118,18 +114,20 @@ export default class DatePicker {
 
         if (dir=="next") {
             // insert a node and prev one
-            let htmls = renderDynamic([yyyy,mm], true)
+            let htmls = renderDynamic([yyyy,mm], true);
             this.swip.appendSlide(htmls);
-
+            
 
             const [yM, mM] = this.prev([yyyy,mm]);
             htmls = renderDynamic([yM,mM])
             if (!this.isExist([yM, mM])) this.swip.prependSlide(htmls);
-
+            
+            
         } else if (dir=="prev") {
             let htmls = renderDynamic([yyyy,mm])
             this.swip.prependSlide(htmls);
         } 
+        
     }
     isExist([yyyy,mm]) {
         const hash = this.hashToString([yyyy,mm])
@@ -186,9 +184,60 @@ export default class DatePicker {
             }
         }
     }
+    moveToSelected() {
+        const _this = this;
+        const selectedDate = this.getDataDate(); 
+        let indexSelected;
+        function retrieveCurrent() {
+            let mm = new Date().getMonth() + 1;
+            let yyyy = new Date().getFullYear();
+            return [yyyy, mm];
+        }
+        function findIndex(arrDate) {
+            const slides = _this.swip.slides;
+            const reducedSelection = _this.hashToString(arrDate ,true);
+            const result = slides.findIndex((e)=>e.getAttribute("data-node")==reducedSelection);
+            if (result ==-1) throw new Error("The item doesn't exist: " + arrDate.join("."))
+            return result;
+        }
+        if (selectedDate!="null") {
+            indexSelected = findIndex(selectedDate.split("."));
+        } else {
+            // move to today
+            indexSelected = findIndex(retrieveCurrent());
+        }
+        this.swip.slideTo(indexSelected);
+        
+    }
+    pickDayFrom(dayNode) {
+        let dd = dayNode.innerText;
+        dd = (dd<10)?"0"+dd+"":dd;
+        const monthNode = dayNode.parentNode.parentNode;
+        const yyyyMM = monthNode.getAttribute("data-node");
+        const selectedDay = yyyyMM+"."+dd;
+        
+        $(`${this.id}`).setAttribute("data-date", selectedDay);
+        this.#updateHeaderDateBox();
+
+        $$(`${this.id} .day:not(.day-outside)`).forEach(
+            el=>{
+                el.classList.remove("day-selected");
+            }
+        )
+        dayNode.classList.add("day-selected")
+    }
     #runEvent() {
         const id = this.id;
-        // const _this = this;
+        const _this = this;
+
+        // pick a day 
+        
+        // $(`${id} .day:not(.day-outside)`).addEventListener("click", (e)=>{
+        //     console.log(e.target.parentNode.parentNode);
+        // })
+        // keyboard navigation goes here . . . 
+
+        // trigger next navigation
         $(`${id} .calendar__navigate--next`).addEventListener("click", ()=>{
             this.move("next")
             this.swip.slideNext();
@@ -202,13 +251,11 @@ export default class DatePicker {
                 if (!el.matches(`${id}`)) el.classList.remove("form__input--focus");
             })
 
+
             this.switchVisibility();
-
             this.openCalendar();
-            // skip the blank slide(temp)
-            this.swip.slideTo(1)
+            this.moveToSelected();
             this.#updateHeaderText();
-
             e.stopPropagation();
         })
 
@@ -262,9 +309,19 @@ export default class DatePicker {
                 $(`${this.id} .calendar__navigate--prev `).setAttribute("aria-disabled", "false");
                 $(`${this.id} .calendar__navigate--prev `).disabled = false;
             },0)
-        })
-    }
+        });
 
+        this.swip.on("slidesUpdated", (a)=> {
+            $$(`${this.id} .day:not(.day-outside)`).forEach(
+                el=>{
+                    el.onclick = function(e) {
+                        _this.pickDayFrom(this)
+                    }
+                }
+            )
+        })
+        
+    }
     // only for navigating to previous month
     move(dir) {
         if (!["next", "prev"].includes(dir)) throw new Error ("Fuck you, donkey!");
@@ -276,7 +333,9 @@ export default class DatePicker {
             this.loadMonth(targetNode, dir);
         } 
     }
-
+    #updateHeaderDateBox() {
+        $(`${this.id} .date__txt-real`).innerText = $(`${this.id}`).getAttribute("data-date");
+    }
     #updateHeaderText() {
         const dataNode = this.getMeta(this.getCurrentSlide()).dataNode;
         let [yyyy,mm] = this.hashSplit(dataNode);
@@ -303,20 +362,28 @@ export default class DatePicker {
             return true;
         } else return false;
     }
-    hashToString([yyyy,mm, dd]) {
+    hashToString([yyyy,mm, dd], removeDay=false) {
         if (dd===undefined) dd = 0;
         if (!Number.isInteger(yyyy) || !Number.isInteger(mm) || !Number.isInteger(dd)) {
             // who knows if a month include a day? so I included the dd check with triple and double if
             if ((mm[0]==0) && (mm.length!=1)) ;else if (mm<10) mm = "0" + mm + "";
 
-            dd = (dd==0) ? "" : ( (dd<10)?(".0"+dd+""):("."+dd+"") ) ;
-            return `${yyyy}.${mm}${dd}`; 
+            if (!removeDay) {
+                dd = (dd==0) ? "" : ( (dd<10)?(".0"+dd+""):("."+dd+"") ) ;
+            } else {
+                dd = "";
+            }
         } else {
             if (mm<10) mm = "0" + mm + "";
-            dd = (dd==0) ? "" : ( (dd<10)?(".0"+dd+""):("."+dd+"") );
 
-            return `${yyyy}.${mm}${dd}`;
+            if (!removeDay) {
+                dd = (dd==0) ? "" : ( (dd<10)?(".0"+dd+""):("."+dd+"") ) ;
+            } else {
+                dd = "";
+            }
+
         }
+        return `${yyyy}.${mm}${dd}`;
     }
     hashSplit(dataNode) {
         const curNode = dataNode.split(".");
@@ -324,7 +391,6 @@ export default class DatePicker {
         let mm = curNode[1]*1;
         return [yyyy,mm];
     }
-
     getCurrentSlide() {
         return this.swip.slides[this.swip.realIndex];
     }
@@ -338,6 +404,11 @@ export default class DatePicker {
             dataNode: inputObj.getAttribute("data-node")
         }
     }
+    getDataDate() {
+        return $(`${this.id}`).getAttribute("data-date");
+        // return #this.selected;
+    }
+
     constructor (formID, config) {
         this.drag = false; // use to prevent from closing calendar when dragging to out of the calendar
         this.id = formID;
