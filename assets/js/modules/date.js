@@ -4,7 +4,7 @@ export default class DatePicker {
     
 
     #adjust() {
-        const _this = this
+        const _this = this;
         function defaultVisibility(id) {
             $(`${id}`).setAttribute("data-display-calendar","false")
         }
@@ -114,23 +114,12 @@ export default class DatePicker {
             return monthRender(start, numberDay, hash);
         }
 
-
         yyyy = yyyy*1; mm = mm*1;
-
-        // let hash = this.hashToString([yyyy,mm]);
-        // let cal = new Date(`${yyyy}-${mm}-01`);
-
-        // let start = (cal.getDay());
-        // let numberDay = this.dates[mm]();
-
-        // let htmls = monthRender(start, numberDay, hash);
-
 
         if (dir=="next") {
             // insert a node and prev one
             let htmls = renderDynamic([yyyy,mm])
             this.swip.appendSlide(htmls);
-
 
 
             const [yM, mM] = this.prev([yyyy,mm]);
@@ -140,17 +129,6 @@ export default class DatePicker {
         } else if (dir=="prev") {
             let htmls = renderDynamic([yyyy,mm])
             this.swip.prependSlide(htmls);
-
-            if (this.swip.realIndex==0) {
-                //fakeNode.insertAdjacentHTML("afterend",htmls)
-            } else {
-
-            }
-            //const fakeNode = $(`${this.id} .swiper-slide[data-legit="false"]`);
-            
-            // this.swip.addSlide(1,htmls);
-            //this.swip.updateSlides();
-            // this.swip.slideTo(2)
         } 
     }
     isExist([yyyy,mm]) {
@@ -210,9 +188,9 @@ export default class DatePicker {
     }
     #runEvent() {
         const id = this.id;
-        const _this = this;
+        // const _this = this;
 
-
+        // open the calendar and handle stuff
         $(`${id} .date__box`).addEventListener("click",  (e)=>{
 
             // "onblur" event copycat [pt.1]
@@ -246,38 +224,13 @@ export default class DatePicker {
             this.#updateHeaderText();
         });
 
+        // only load the previous month
         this.swip.on("touchEnd", (a)=>{
-
-            function move(dir) {
-                if (!["next", "prev"].includes(dir)) throw new Error ("Fuck you, donkey!");
-
-                const curSlide = _this.swip.slides[_this.swip.realIndex];
-                const curNode = curSlide.getAttribute("data-node").split(".");
-                const targetNode = _this.prev((curNode));
-                console.log("FUCK", targetNode)
-                if (!_this.isExist(targetNode)) {
-                    _this.loadMonth(targetNode, dir);
-                } 
-
-            }
-
-            setTimeout(()=>{move("prev")},0)
-            // this.#updateHeaderText();
+            setTimeout(()=>{this.move("prev")},0)
         });
+
         this.swip.on("sliderFirstMove", (a)=>{
             this.drag = true;
-
-            function move(dir) {
-                if (!["next", "prev"].includes(dir)) throw new Error ("Fuck you, donkey!");
-
-                const curSlide = _this.swip.slides[_this.swip.realIndex];
-                const curNode = curSlide.getAttribute("data-node").split(".");
-                const targetNode = (dir=="prev")?_this.prev(curNode):_this.next(curNode);
-                if (!_this.isExist(targetNode)) {
-                    _this.loadMonth(targetNode, dir);
-                } 
-
-            }
 
             if (a.touches.diff > 0 ) {
                 // clone the previous month 
@@ -286,25 +239,28 @@ export default class DatePicker {
             } else {
                 // clone the next month
                 console.log("next");
-                move("next");
+                this.move("next");
             }
         })
 
-
         this.swip.on("sliderMove", (a)=> {
-            /* if (this.posX!=null) {
-                if (this.posX > b.pageX) console.log("left"); else console.log("right");
-                this.posX = b.pageX
-            } else {
-                this.posX = b.pageX
-            }
-            console.log(b.pageX) */
+            
         })
         
     }
-    jump() {
-        this.swip.slideTo(1); // test
+
+    // only for navigating to previous month
+    move(dir) {
+        if (!["next", "prev"].includes(dir)) throw new Error ("Fuck you, donkey!");
+
+        const curSlide = this.swip.slides[this.swip.realIndex];
+        const curNode = curSlide.getAttribute("data-node").split(".");
+        const targetNode = (dir=="prev")?this.prev(curNode):this.next(curNode);
+        if (!this.isExist(targetNode)) {
+            this.loadMonth(targetNode, dir);
+        } 
     }
+
     #updateHeaderText() {
         const dataNode = this.getMeta(this.getCurrentSlide()).dataNode;
         let [yyyy,mm] = this.hashSplit(dataNode);
