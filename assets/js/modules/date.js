@@ -67,7 +67,7 @@ export default class DatePicker {
             throw new Error ("co loi xay ra. fuck you")
         }
 
-        function monthRender(start, numberDay, hash) {
+        function monthRender(start, numberDay, hash, hasSelectedDay = false) {
             let raw = "";
             // load from previous month
             if (start > 0) {
@@ -83,7 +83,7 @@ export default class DatePicker {
             }
             // load current month
             for (let i = 1; i<=numberDay; ++i) {
-                let daySelectedInjection = (daySelected==i)?" day-selected ":"";
+                let daySelectedInjection = ((daySelected==i)&&(hasSelectedDay))?" day-selected ":"";
 
                 raw += `<div class="col day${daySelectedInjection}">${i}</div>\n`;
             }
@@ -105,20 +105,20 @@ export default class DatePicker {
             return htmls;
         }
 
-        function renderDynamic([yyyy,mm]) {
+        function renderDynamic([yyyy,mm], hasSelectedDay = false) {
             let hash = _this.hashToString([yyyy,mm]);
             let cal = new Date(`${yyyy}-${mm}-01`);
             let start = (cal.getDay());
             let numberDay = _this.dates[mm](yyyy);
     
-            return monthRender(start, numberDay, hash);
+            return monthRender(start, numberDay, hash, hasSelectedDay);
         }
 
         yyyy = yyyy*1; mm = mm*1;
 
         if (dir=="next") {
             // insert a node and prev one
-            let htmls = renderDynamic([yyyy,mm])
+            let htmls = renderDynamic([yyyy,mm], true)
             this.swip.appendSlide(htmls);
 
 
@@ -189,6 +189,10 @@ export default class DatePicker {
     #runEvent() {
         const id = this.id;
         // const _this = this;
+        $(`${id} .calendar__navigate--next`).addEventListener("click", ()=>{
+            this.move("next")
+            this.swip.slideNext();
+        })
 
         // open the calendar and handle stuff
         $(`${id} .date__box`).addEventListener("click",  (e)=>{
@@ -224,9 +228,9 @@ export default class DatePicker {
             this.#updateHeaderText();
         });
 
-        // only load the previous month
-        this.swip.on("touchEnd", (a)=>{
-            setTimeout(()=>{this.move("prev")},0)
+        // only load the previous month - prevent from unwanted glitch
+        this.swip.on("slidePrevTransitionEnd", (a)=>{
+            this.move("prev")
         });
 
         this.swip.on("sliderFirstMove", (a)=>{
@@ -234,11 +238,11 @@ export default class DatePicker {
 
             if (a.touches.diff > 0 ) {
                 // clone the previous month 
-                console.log("prev"); 
+                // console.log("prev"); 
                 //move("prev");
             } else {
                 // clone the next month
-                console.log("next");
+                // console.log("next");
                 this.move("next");
             }
         })
@@ -246,7 +250,19 @@ export default class DatePicker {
         this.swip.on("sliderMove", (a)=> {
             
         })
-        
+        this.swip.on("reachEnd", () => {
+            setInterval(()=>{
+                $(`${this.id} .calendar__navigate--next `).classList
+                .remove("swiper-button-disabled");
+                $(`${this.id} .calendar__navigate--next `).setAttribute("aria-disabled", "false");
+                $(`${this.id} .calendar__navigate--next `).disabled = false;
+
+                $(`${this.id} .calendar__navigate--prev `).classList
+                .remove("swiper-button-disabled");
+                $(`${this.id} .calendar__navigate--prev `).setAttribute("aria-disabled", "false");
+                $(`${this.id} .calendar__navigate--prev `).disabled = false;
+            },0)
+        })
     }
 
     // only for navigating to previous month
@@ -264,7 +280,7 @@ export default class DatePicker {
     #updateHeaderText() {
         const dataNode = this.getMeta(this.getCurrentSlide()).dataNode;
         let [yyyy,mm] = this.hashSplit(dataNode);
-        console.log(yyyy,mm);
+        // console.log(yyyy,mm);
         $(`${this.id} .calendar__move`).innerText = this.months[mm]+" "+yyyy;
     }
     next([yyyy,mm]) {
@@ -313,7 +329,7 @@ export default class DatePicker {
         return this.swip.slides[this.swip.realIndex];
     }
     getSlideFromNode(inputNode) {
-        return $(`${this.id} .swiper-slide[data-node="${hash}"]`);
+        return $(`${this.id} .swiper-slide[data-node="${inputNode}"]`);
     }
     getMeta(inputObj) {
         if (inputObj.getAttribute("data-legit")=="false") inputObj = inputObj.nextSibling;
@@ -326,6 +342,7 @@ export default class DatePicker {
         this.drag = false; // use to prevent from closing calendar when dragging to out of the calendar
         this.id = formID;
         this.posX = null;
+
         // data
         this.months = ["NaM","January","February","March","April","May","June","July","August","September","October","November","December"];
         this.dates = [-1,()=>31,function(yr=2024){return ( ((yr%100==0)&&(yr%400==0)) || ((yr%4==0)&&(yr%100!=0)) ) ? 29 : 28},()=>31,()=>30,()=>31,()=>30,()=>31,()=>31,()=>30,()=>31,()=>30,()=>31];
@@ -334,10 +351,5 @@ export default class DatePicker {
         // actions
         this.#adjust();
         this.#runEvent();
-
-        // console.log(this.dates[3]())
     }
 }
-
-// 181 and 222px
-// 
