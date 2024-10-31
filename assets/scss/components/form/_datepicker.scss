@@ -5,7 +5,8 @@
         border-radius: a.$form-bdrs; border: 1px solid var(--form-bd);
         width: a.$form-w-default; padding: 8px 20px; display: block;
         cursor: pointer; transition: background .3s, border-color .3s; 
-        background: var(--form-bg);
+        background: var(--form-bg); 
+        & *:not(.date__dd) {background: inherit;}
         &:hover {
             background: var(--form-bg-hover); border-color: var(--form-bd-hover);
             img {filter: var(--icon-hover)}
@@ -18,10 +19,22 @@
     &__txt {
         flex-grow: 1;
         &-caption {color: var(--form-primary);}
-        &-real {font-family: a.$normal;}
+        &-real {font-family: a.$normal; position: relative;}
     }
     &__dd {@include a.square(20px)}
 }
 
-
+// for keyboard input
+.date {
+    &__txt {
+        &-input {
+            font-family: a.$normal; display: flex; position: absolute; top: 0; visibility: hidden;
+            &--ON {visibility: visible;}
+        }
+        &-char {
+            
+        }
+        &-selected {color: yellow}
+    }
+}
 

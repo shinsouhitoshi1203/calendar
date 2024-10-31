@@ -2115,6 +2115,9 @@ header {
   transition: background 0.3s, border-color 0.3s;
   background: var(--form-bg);
 }
+.date__box *:not(.date__dd) {
+  background: inherit;
+}
 .date__box:hover {
   background: var(--form-bg-hover);
   border-color: var(--form-bd-hover);
@@ -2141,10 +2144,25 @@ header {
 }
 .date__txt-real {
   font-family: "aptos", system-ui, sans-serif;
+  position: relative;
 }
 .date__dd {
   width: 20px;
   height: 20px;
+}
+
+.date__txt-input {
+  font-family: "aptos", system-ui, sans-serif;
+  display: flex;
+  position: absolute;
+  top: 0;
+  visibility: hidden;
+}
+.date__txt-input--ON {
+  visibility: visible;
+}
+.date__txt-selected {
+  color: yellow;
 }
 
 .form__active .form__box {
