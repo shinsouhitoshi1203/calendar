@@ -2158,7 +2158,7 @@ header {
   top: 0;
   visibility: hidden;
 }
-.date__txt-input--ON {
+.date__txt-input[data-mode=on] {
   visibility: visible;
 }
 .date__txt-selected {
