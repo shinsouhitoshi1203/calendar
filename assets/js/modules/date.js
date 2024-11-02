@@ -90,41 +90,49 @@ export default class DatePicker {
             throw new Error ("co loi xay ra. fuck you")
         }
 
-        function monthRender(start, numberDay, hash, hasSelectedDay = false) {
+        function monthRender( inp={} ) {
+            
+            //start, numberDay, hash, hasSelectedDay = false
+
+            // -------------------------------------
+            // debugging
+            // -------------------------------------
             let raw = "";
             // load from previous month
-            if (start > 0) {
-                let prevMonth = _this.prev([yyyy, mm])[1];
-                let prevNumDate = _this.dates[prevMonth](yyyy);
+            if (inp.start > 0) {
+                let prevMonth = _this.prev([inp.yyyy, inp.mm])[1];
+                let prevNumDate = _this.dates[prevMonth](inp.yyyy);
 
-                let cnt = start-1;
+                let cnt = inp.start-1;
                 for (let i = prevNumDate; i>=21 ;--i) {
-                    raw = `<div class="col day day-outside">${i}</div>\n` + raw;
+                    raw = `<div class="col day day-outside day-previous">${i}</div>\n` + raw;
                     --cnt;
                     if (cnt==-1) break;
                 }
             }
             // load current month
-            for (let i = 1; i<=numberDay; ++i) {
-                let daySelectedInjection = ((daySelected==i)&&(hasSelectedDay))?" day-selected ":"";
+            for (let i = 1; i<=inp.numberDay; ++i) {
+                let daySelectedInjection = ((daySelected==i)&&(inp.hasSelectedDay))?" day-selected ":"";
 
-                raw += `<div class="col day${daySelectedInjection}">${i}</div>\n`;
+                raw += `<div class="col day-${i} day${daySelectedInjection}">${i}</div>\n`;
             }
             // load next:
             // if over 35.. else..
             let cnt = 0;
-            if (start + numberDay > 35) {
-                for (let i = start + numberDay; i<=41; ++i) {
+            if (inp.start + inp.numberDay > 35) {
+                for (let i = inp.start + inp.numberDay; i<=41; ++i) {
                     cnt++;
-                    raw += `<div class="col day day-outside">${cnt}</div>\n`;
+                    raw += `<div class="col day day-outside day-forward">${cnt}</div>\n`;
                 } 
             } else {
-                for (let i = start + numberDay; i<=34; ++i) {
-                    cnt++;
-                    raw += `<div class="col day day-outside">${cnt}</div>\n`;
-                } 
+                if (34 - inp.start - inp.numberDay + 1 < 7) {
+                    for (let i = inp.start + inp.numberDay; i<=34; ++i) {
+                        cnt++;
+                        raw += `<div class="col day day-outside day-forward">${cnt}</div>\n`;
+                    } 
+                }
             }
-            const htmls = `<div class="swiper-slide" data-legit="true" data-node="${hash}"><div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">${raw}</div></div>`
+            const htmls = `<div class="swiper-slide" data-legit="true" data-node="${inp.hash}"><div class="calendar__row row gx-0 row-cols-7" calendar-cell="day-list">${raw}</div></div>`
             return htmls;
         }
 
@@ -132,9 +140,16 @@ export default class DatePicker {
             let hash = _this.hashToString([yyyy,mm]);
             let cal = new Date(`${yyyy}-${mm}-01`);
             let start = (cal.getDay());
-            let numberDay = _this.dates[mm](yyyy);
+            let numberDay = _this.dates[mm](yyyy); // the render number of day
     
-            return monthRender(start, numberDay, hash, hasSelectedDay);
+            return monthRender( {
+                yyyy,
+                mm,
+                start,
+                numberDay,
+                hash,
+                hasSelectedDay
+            });
         }
 
         if (dir=="next") {
@@ -143,8 +158,8 @@ export default class DatePicker {
             this.swip.appendSlide(htmls);
             
             
-            const [yM, mM] = this.prev([yyyy,mm]);
-            htmls = renderDynamic([yM,mM])
+            const [yM, mM] = this.prev([yyyy,mm]); // get the previous node
+            htmls = renderDynamic([yM,mM]);
             if (!this.isExist([yM, mM])) this.swip.prependSlide(htmls);
             
         } else if (dir=="prev") {
@@ -234,8 +249,10 @@ export default class DatePicker {
         
     }
     pickDayFrom(dayNode) {
+        // default the date picker would be here
         let dd = dayNode.innerText;
         dd = (dd<10)?"0"+dd+"":dd;
+
         const monthNode = dayNode.parentNode.parentNode;
         const yyyyMM = monthNode.getAttribute("data-node");
         const selectedDay = yyyyMM+"."+dd;
@@ -255,6 +272,20 @@ export default class DatePicker {
         const id = this.id;
         const _this = this;
 
+        // functions
+        function requestPickFromOutside(dir="", node) {
+            if (!["next", "prev"].includes(dir)) throw new Error("Where tf are you asking me to go");
+            const dayX = ".day-"+node.innerText;
+            const curNode = _this.getMeta().dataNode;
+
+            const arrTargetNode = (dir=="prev") ? _this.prev(_this.hashSplit(curNode)) : _this.next(_this.hashSplit(curNode));
+            const targetNode = _this.hashToString(arrTargetNode);
+            const itemSelected = $(`${id} .swiper-slide[data-node="${targetNode}"] ${dayX}`);
+            
+            // console.log(itemSelected);
+            _this.pickDayFrom(itemSelected);
+            // if (dir=="prev") _this.swip.slidePrev(200); else _this.swip.slideNext(200);
+        }
         // pick a day 
         
         // $(`${id} .day:not(.day-outside)`).addEventListener("click", (e)=>{
@@ -390,7 +421,26 @@ export default class DatePicker {
                         _this.pickDayFrom(this)
                     }
                 }
-            )
+            );
+            $$(`${this.id} .day-previous`).forEach(
+                el=>{
+                    el.onclick = function(e) {
+                        requestPickFromOutside("prev", this);
+                        _this.swip.slidePrev();
+
+                    }
+                }
+            );
+            
+            $$(`${this.id} .day-forward`).forEach(
+                el=>{
+                    el.onclick = function(e) {
+                        _this.requestMove("next");
+                        requestPickFromOutside("next", this);
+                        _this.swip.slideNext();
+                    }
+                }
+            );
 
             if (this.dir=="next") {
                 this.dir = "none";
@@ -408,6 +458,7 @@ export default class DatePicker {
         const targetNode = (dir=="prev")?this.prev(curNode):this.next(curNode);
         if (!this.isExist(targetNode)) {
             this.loadMonth(targetNode, dir);
+            if (dir=="next") this.swip.slideNext();
         } 
     }
     #updateHeaderDateBox() {
@@ -435,7 +486,7 @@ export default class DatePicker {
     getSlideFromNode(inputNode) {
         return $(`${this.id} .swiper-slide[data-node="${inputNode}"]`);
     }
-    getMeta(inputObj) {
+    getMeta(inputObj = this.getCurrentSlide()) {
         if (inputObj.getAttribute("data-legit")=="false") inputObj = inputObj.nextSibling;
         return {
             obj: inputObj,
@@ -527,7 +578,21 @@ export default class DatePicker {
     
         // data
         this.months = ["NaM","January","February","March","April","May","June","July","August","September","October","November","December"];
-        this.dates = [-1,()=>31,function(yr=2024){return ( ((yr%100==0)&&(yr%400==0)) || ((yr%4==0)&&(yr%100!=0)) ) ? 29 : 28},()=>31,()=>30,()=>31,()=>30,()=>31,()=>31,()=>30,()=>31,()=>30,()=>31];
+        this.dates = [
+            -1,
+            ()=>31,
+            function(yr=2024){return ( ((yr%100==0)&&(yr%400==0)) || ((yr%4==0)&&(yr%100!=0)) ) ? 29 : 28},
+            ()=>31,
+            ()=>30,
+            ()=>31,
+            ()=>30,
+            ()=>31,
+            ()=>31,
+            ()=>30,
+            ()=>31,
+            ()=>30,
+            ()=>31
+        ];
  
 
         // required ctions
