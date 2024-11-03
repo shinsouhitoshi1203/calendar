@@ -52,5 +52,4 @@ function findParent(input, target, limit = 10) {
 
 document.addEventListener("DOMContentLoaded", () => {
     switchTheme(); fuckForm();
-    
 })

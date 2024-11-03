@@ -7,4 +7,5 @@ document.addEventListener("DOMContentLoaded",()=>{
             
         }
     );
+    console.log(date1)
 })
