@@ -6,4 +6,7 @@
 
 .form {
     &__active &__box {border-color: var(--form-bd-active);}
+    &__input {
+        &--focus {display: block;}
+    }
 }

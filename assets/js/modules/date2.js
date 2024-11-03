@@ -3,6 +3,11 @@ let $$ = document.querySelectorAll.bind(document);
 
 
 // private variables
+let datepickerID = "";
+let dragStatus = false;
+let direction = "null";
+const Months = ["NaM","January","February","March","April","May","June","July","August","September","October","November","December"];
+const Dates=[-1,()=>31,function(n=2024){return n%100==0&&n%400==0||n%4==0&&n%100!=0?29:28},()=>31,()=>30,()=>31,()=>30,()=>31,()=>31,()=>30,()=>31,()=>30,()=>31];
 /* 
 
     slider note:
@@ -34,94 +39,15 @@ let $$ = document.querySelectorAll.bind(document);
 export default class DatePicker {
     #clone() {
         // will do it later
-        $(`${this.id}`).innerHTML = "";
-        const htmls = `<div class="form__box date__box">
-                        
-                        
-                        <div class="hover-bg"></div>
-                        <div class="date__display">
-                            <i class="fa-regular fa-calendar"></i>
-                            <div class="date__txt">
-                                <p class="date__txt-caption fs-10">Select a date</p>
-                                <div class="date__txt-real fw-700 fs-16">
-                                    <span></span>
-                                    <div class="date__txt-input fw-700 fs-16" data-mode="off">
-                                        <span class="date__txt-char date__txt-selected">y</span>
-                                        <span class="date__txt-char">2</span>
-                                        <span class="date__txt-char">y</span>
-                                        <span class="date__txt-char">y</span>
-                                        <span class="date__txt-splitor">.</span>
-                                        <span class="date__txt-char">m</span>
-                                        <span class="date__txt-char">m</span>
-                                        <span class="date__txt-splitor">.</span>
-                                        <span class="date__txt-char">d</span>
-                                        <span class="date__txt-char">d</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="date__dd">
-                                <img src="./../icons/arrow-down.svg" class="webpage__icon" alt="">
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="date__calendar calendar" type="minified" >
-                        <div class="calendar__main">
-                            <div class="calendar__header d-flex ai-center jc-space-between">
-                                <button class="button fs-14 fw-600 calendar__move">undefined</button>
-                                <div class="calendar__navigate">
-                                    <button class="button button__blank calendar__navigate--prev" title="Previous month">
-                                        <img src="./../icons/arrow-left.svg"  class="webpage__icon" alt="">
-                                    </button>
-                                    <button class="button button__blank calendar__navigate--next" title="Next month">
-                                        <img src="./../icons/arrow-right.svg" class="webpage__icon" alt="">
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="calendar__container">
-                                <div class="swiper calendar__selection">
-                                    <div class="swiper-wrapper">
-                                        
-                                        <div class="swiper-slide" data-browse="month">
-                                            <div class="row row-cols-1 calendar__table">
-                                                <div class="col">
-                                                    <div class="calendar__row row gx-0 gy-0 row-cols-7" calendar-cell="day-week">
-                                                        <div class="col">Sun</div>
-                                                        <div class="col">Mon</div>
-                                                        <div class="col">Tue</div>
-                                                        <div class="col">Wed</div>
-                                                        <div class="col">Thu</div>
-                                                        <div class="col">Fri</div>
-                                                        <div class="col">Sat</div>
-                                                    </div>
-                                                </div>
-                                                <div class="col">  
-                                                    <div class="swiper calendar__month">
-                                                        <div class="swiper-wrapper"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide" data-browse="period">Test for fun lmfao agohsdfhuosod</div>
-                                        <div class="swiper-slide" data-browse="year">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat, distinctio.</div>
-                                    </div>
-
-                                </div>
-                                
-                            </div>
-                            
-                        </div>
-                    </div>`;
-        $(`${this.id}`).insertAdjacentHTML("afterbegin", htmls);
-        $(`${this.id}`).setAttribute("data-input","date");
-        $(`${this.id}`).setAttribute("data-date","null");
-        $(`${this.id}`).setAttribute("data-display-calendar","false")
     }
     
     #adjust() {
         const _this = this;
         function defaultVisibility(id) {
             $(`${id}`).setAttribute("data-display-calendar","false")
+        }
+        function cleanInner(id) {
+            $(`${id} .calendar__month .swiper-wrapper`).innerHTML = "";
         }
         function slider(id) {
             _this.swip = new Swiper(`${id} .calendar__month`,{
@@ -134,7 +60,8 @@ export default class DatePicker {
                 }, // will be fixed in order to adapt to navigations with multiple swipers
                 watchOverflow:false,
                 spaceBetween: 25,
-            })
+            });
+            console.log(_this.swip)
         }
         function modifyValue(id) {
             const hash = $(`${id}`).getAttribute("data-date");
@@ -147,12 +74,13 @@ export default class DatePicker {
         }
 
         // run
-        defaultVisibility(this.id);
-        slider(this.id);
-        modifyValue(this.id);
+        defaultVisibility(datepickerID);
+        cleanInner(datepickerID);
+        slider(datepickerID);
+        modifyValue(datepickerID);
     }
     switchVisibility(val = "") {
-        const id = this.id;
+        const id = datepickerID;
         // alert(11)
         if ($(id)!==undefined) {
             if (typeof(val)=="string") {
@@ -189,7 +117,7 @@ export default class DatePicker {
             // load from previous month
             if (inp.start > 0) {
                 let prevMonth = _this.prev([inp.yyyy, inp.mm])[1];
-                let prevNumDate = _this.dates[prevMonth](inp.yyyy);
+                let prevNumDate = Dates[prevMonth](inp.yyyy);
 
                 let cnt = inp.start-1;
                 for (let i = prevNumDate; i>=21 ;--i) {
@@ -228,7 +156,7 @@ export default class DatePicker {
             let hash = _this.hashToString([yyyy,mm]);
             let cal = new Date(`${yyyy}-${mm}-01`);
             let start = (cal.getDay());
-            let numberDay = _this.dates[mm](yyyy); // the render number of day
+            let numberDay = Dates[mm](yyyy); // the render number of day
     
             return monthRender( {
                 yyyy,
@@ -258,7 +186,7 @@ export default class DatePicker {
     }
     isExist([yyyy,mm]) {
         const hash = this.hashToString([yyyy,mm])
-        const element = $(`${this.id} .swiper-slide[data-node="${hash}"]`);
+        const element = $(`${datepickerID} .swiper-slide[data-node="${hash}"]`);
         if (  element!=null ) {
             return true;
         } else {
@@ -272,16 +200,16 @@ export default class DatePicker {
             return [yyyy, mm];
         }
         let currentYYMM = retrieveCurrent();
-        const hash = $(`${this.id}`).getAttribute("data-date");
+        const hash = $(`${datepickerID}`).getAttribute("data-date");
         // fill the calendar
-        if ($$(`${this.id} .swiper-slide[data-legit="true"]`).length==0) {
+        if ($$(`${datepickerID} .swiper-slide[data-legit="true"]`).length==0) {
             // completely new 
 
             if (this.match(hash)) {
                 this.loadMonth(hash.split("."));
             } else {
                 if (!this.isExist(currentYYMM)) {
-                    $(`${this.id}`).setAttribute("data-date", "null");
+                    $(`${datepickerID}`).setAttribute("data-date", "null");
                     this.loadMonth(currentYYMM);
                 } else {
 
@@ -292,7 +220,7 @@ export default class DatePicker {
         } else {
             // has something to test for real
 
-            if ($(`${this.id}`).getAttribute("data-date")=="null") {
+            if ($(`${datepickerID}`).getAttribute("data-date")=="null") {
                 // create object
                 if (!this.isExist(currentYYMM)) {
                     let currentYYMM = retrieveCurrent();
@@ -345,10 +273,10 @@ export default class DatePicker {
         const yyyyMM = monthNode.getAttribute("data-node");
         const selectedDay = yyyyMM+"."+dd;
         
-        $(`${this.id}`).setAttribute("data-date", selectedDay);
+        $(`${datepickerID}`).setAttribute("data-date", selectedDay);
         this.#updateHeaderDateBox();
 
-        $$(`${this.id} .day:not(.day-outside)`).forEach(
+        $$(`${datepickerID} .day:not(.day-outside)`).forEach(
             el=>{
                 el.classList.remove("day-selected");
             }
@@ -357,7 +285,7 @@ export default class DatePicker {
     }
     
     #runEvent() {
-        const id = this.id;
+        const id = datepickerID;
         const _this = this;
 
         // functions
@@ -366,11 +294,11 @@ export default class DatePicker {
             const dayX = ".day-"+node.innerText;
             const curNode = _this.getMeta().dataNode;
 
-            const arrTargetNode = (dir=="prev") ? _this.prev(_this.hashSplit(curNode)) : (_this.hashSplit(curNode));
+            const arrTargetNode = (dir=="prev") ? _this.prev(_this.hashSplit(curNode)) : _this.next(_this.hashSplit(curNode));
             const targetNode = _this.hashToString(arrTargetNode);
             const itemSelected = $(`${id} .swiper-slide[data-node="${targetNode}"] ${dayX}`);
             
-             console.log(`${id} .swiper-slide[data-node="${targetNode}"] ${dayX}`, itemSelected);
+            // console.log(itemSelected);
             _this.pickDayFrom(itemSelected);
             // if (dir=="prev") _this.swip.slidePrev(200); else _this.swip.slideNext(200);
         }
@@ -447,8 +375,8 @@ export default class DatePicker {
         document.addEventListener("click", (e)=>{
             console.log(e.target);
             if (!e.target.matches(`${id} *`)) {
-                if (this.drag) {
-                    this.drag = false;
+                if (dragStatus) {
+                    dragStatus = false;
                 } else {
                     this.switchVisibility(false); 
                 }
@@ -465,7 +393,7 @@ export default class DatePicker {
         });
 
         this.swip.on("sliderFirstMove", (a)=>{
-            this.drag = true;
+            dragStatus = true;
 
             if (a.touches.diff > 0 ) {
                 // clone the previous month 
@@ -483,29 +411,28 @@ export default class DatePicker {
         })
         this.swip.on("reachEnd", () => {
             setInterval(()=>{
-                $(`${this.id} .calendar__navigate--next `).classList
+                $(`${datepickerID} .calendar__navigate--next `).classList
                 .remove("swiper-button-disabled");
-                $(`${this.id} .calendar__navigate--next `).setAttribute("aria-disabled", "false");
-                $(`${this.id} .calendar__navigate--next `).disabled = false;
+                $(`${datepickerID} .calendar__navigate--next `).setAttribute("aria-disabled", "false");
+                $(`${datepickerID} .calendar__navigate--next `).disabled = false;
 
-                $(`${this.id} .calendar__navigate--prev `).classList
+                $(`${datepickerID} .calendar__navigate--prev `).classList
                 .remove("swiper-button-disabled");
-                $(`${this.id} .calendar__navigate--prev `).setAttribute("aria-disabled", "false");
-                $(`${this.id} .calendar__navigate--prev `).disabled = false;
+                $(`${datepickerID} .calendar__navigate--prev `).setAttribute("aria-disabled", "false");
+                $(`${datepickerID} .calendar__navigate--prev `).disabled = false;
             },0)
         });
 
         this.swip.on("slidesUpdated", (a)=> {
             // only add event when new months are added.
-            $$(`${this.id} .day:not(.day-outside)`).forEach(
+            $$(`${datepickerID} .day:not(.day-outside)`).forEach(
                 el=>{
                     el.onclick = function(e) {
-                        _this.pickDayFrom(this);
-                        _this.switchVisibility(false);
+                        _this.pickDayFrom(this)
                     }
                 }
             );
-            $$(`${this.id} .day-previous`).forEach(
+            $$(`${datepickerID} .day-previous`).forEach(
                 el=>{
                     el.onclick = function(e) {
                         requestPickFromOutside("prev", this);
@@ -515,7 +442,7 @@ export default class DatePicker {
                 }
             );
             
-            $$(`${this.id} .day-forward`).forEach(
+            $$(`${datepickerID} .day-forward`).forEach(
                 el=>{
                     el.onclick = function(e) {
                         _this.requestMove("next");
@@ -525,8 +452,8 @@ export default class DatePicker {
                 }
             );
 
-            if (this.dir=="next") {
-                this.dir = "none";
+            if (direction=="next") {
+                direction = "none";
                 this.swip.slideNext(200);
             }
         })
@@ -545,13 +472,13 @@ export default class DatePicker {
         } 
     }
     #updateHeaderDateBox() {
-        $(`${this.id} .date__txt-real > span`).innerText = $(`${this.id}`).getAttribute("data-date");
+        $(`${datepickerID} .date__txt-real > span`).innerText = $(`${datepickerID}`).getAttribute("data-date");
     }
     #updateHeaderText() {
         const dataNode = this.getMeta(this.getCurrentSlide()).dataNode;
         let [yyyy,mm] = this.hashSplit(dataNode);
         // console.log(yyyy,mm);
-        $(`${this.id} .calendar__move`).innerText = this.months[mm]+" "+yyyy;
+        $(`${datepickerID} .calendar__move`).innerText = Months[mm]+" "+yyyy;
     }
     next([yyyy,mm]) {
         yyyy = Number.parseInt(yyyy); mm = Number.parseInt(mm);
@@ -567,7 +494,7 @@ export default class DatePicker {
         return this.swip.slides[this.swip.realIndex];
     }
     getSlideFromNode(inputNode) {
-        return $(`${this.id} .swiper-slide[data-node="${inputNode}"]`);
+        return $(`${datepickerID} .swiper-slide[data-node="${inputNode}"]`);
     }
     getMeta(inputObj = this.getCurrentSlide()) {
         if (inputObj.getAttribute("data-legit")=="false") inputObj = inputObj.nextSibling;
@@ -594,7 +521,7 @@ export default class DatePicker {
                 if (s[1]*1 == 0|| s[1]*1 > 12 ) {
                     return false; 
                 } else {
-                    if (s[2] == 0|| s[2] > _this.dates[s[1]*1](s[0]*1) ) return false;
+                    if (s[2] == 0|| s[2] > Dates[s[1]*1](s[0]*1) ) return false;
                 }
                 return true;
             } else return false;
@@ -638,45 +565,23 @@ export default class DatePicker {
     }
 
     getDataDate() {
-        return $(`${this.id}`).getAttribute("data-date");
+        return $(`${datepickerID}`).getAttribute("data-date");
         // return #this.selected;
     }
     isFocus() {
-        if ($(`${this.id}`).classList.contains("form__input--focus")) {
+        if ($(`${datepickerID}`).classList.contains("form__input--focus")) {
             return true;
         } else {
             return false;
         }
     }
     constructor (formID, config) {
-        this.id = formID;
         // event variables
-        this.drag = false; // use to prevent from closing calendar when dragging to out of the calendar
-        this.posX = null;
-        this.dir = "none";
+        datepickerID = formID;
+        direction = "none";
         // input options
         this.inputKeyboard = "";
         this.defaultFormat = "yyyy.mm.dd";
-    
-        // data
-        this.months = ["NaM","January","February","March","April","May","June","July","August","September","October","November","December"];
-        this.dates = [
-            -1,
-            ()=>31,
-            function(yr=2024){return ( ((yr%100==0)&&(yr%400==0)) || ((yr%4==0)&&(yr%100!=0)) ) ? 29 : 28},
-            ()=>31,
-            ()=>30,
-            ()=>31,
-            ()=>30,
-            ()=>31,
-            ()=>31,
-            ()=>30,
-            ()=>31,
-            ()=>30,
-            ()=>31
-        ];
- 
-
         // required actions
         this.#clone();
         this.#adjust();
@@ -686,87 +591,3 @@ export default class DatePicker {
         
     }
 }
-
-
-/* 
-
-<div class="form__box date__box">
-                        
-                        
-                        <div class="hover-bg"></div>
-                        <div class="date__display">
-                            <i class="fa-regular fa-calendar"></i>
-                            <div class="date__txt">
-                                <p class="date__txt-caption fs-10">Select a date</p>
-                                <div class="date__txt-real fw-700 fs-16">
-                                    <span></span>
-                                    <div class="date__txt-input fw-700 fs-16" data-mode="off">
-                                        <span class="date__txt-char date__txt-selected">y</span>
-                                        <span class="date__txt-char">2</span>
-                                        <span class="date__txt-char">y</span>
-                                        <span class="date__txt-char">y</span>
-                                        <span class="date__txt-splitor">.</span>
-                                        <span class="date__txt-char">m</span>
-                                        <span class="date__txt-char">m</span>
-                                        <span class="date__txt-splitor">.</span>
-                                        <span class="date__txt-char">d</span>
-                                        <span class="date__txt-char">d</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="date__dd">
-                                <img src="./../icons/arrow-down.svg" class="webpage__icon" alt="">
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="date__calendar calendar" type="minified" >
-                        <div class="calendar__main">
-                            <div class="calendar__header d-flex ai-center jc-space-between">
-                                <button class="button fs-14 fw-600 calendar__move">undefined</button>
-                                <div class="calendar__navigate">
-                                    <button class="button button__blank calendar__navigate--prev" title="Previous month">
-                                        <img src="./../icons/arrow-left.svg"  class="webpage__icon" alt="">
-                                    </button>
-                                    <button class="button button__blank calendar__navigate--next" title="Next month">
-                                        <img src="./../icons/arrow-right.svg" class="webpage__icon" alt="">
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="calendar__container">
-                                <div class="swiper calendar__selection">
-                                    <div class="swiper-wrapper">
-                                        
-                                        <div class="swiper-slide" data-browse="month">
-                                            <div class="row row-cols-1 calendar__table">
-                                                <div class="col">
-                                                    <div class="calendar__row row gx-0 gy-0 row-cols-7" calendar-cell="day-week">
-                                                        <div class="col">Sun</div>
-                                                        <div class="col">Mon</div>
-                                                        <div class="col">Tue</div>
-                                                        <div class="col">Wed</div>
-                                                        <div class="col">Thu</div>
-                                                        <div class="col">Fri</div>
-                                                        <div class="col">Sat</div>
-                                                    </div>
-                                                </div>
-                                                <div class="col">  
-                                                    <div class="swiper calendar__month">
-                                                        <div class="swiper-wrapper"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide" data-browse="period">Test for fun lmfao agohsdfhuosod</div>
-                                        <div class="swiper-slide" data-browse="year">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat, distinctio.</div>
-                                    </div>
-
-                                </div>
-                                
-                            </div>
-                            
-                        </div>
-                    </div>
-
-
-*/

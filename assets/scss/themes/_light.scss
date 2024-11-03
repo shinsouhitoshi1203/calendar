@@ -8,24 +8,29 @@ html[data-theme="light"]{
     --text-caption: #121212;
     --text-disabled: #858585;
     --icon-filter: initial;
+    --icon-hover: brightness(0) saturate(100%) invert(45%) sepia(68%) saturate(5611%) hue-rotate(225deg) brightness(98%) contrast(93%);
     --icon-disabled: brightness(0) saturate(100%) invert(56%) sepia(0%) saturate(28%) hue-rotate(139deg) brightness(96%) contrast(90%);
     
-// components
-    // form 
-    --form-shadow: 0 5px 10px #ccc;
-    --form-primary: #5865F2;
-    --form-bg: #FFFFFF;
-    --form-bd: #ccc;
-    --form-caption: var(--text-caption);
+    // components
+        // form 
+        --form-shadow: 0 5px 10px #ccc;
+        --form-primary: #5865F2;
+        --form-bg: #FFFFFF;
+        --form-bd: #ccc;
+        --form-caption: var(--text-caption);
 
 
-    --form-bg-hover: #f2f1f1;
-    --form-bd-hover: #999999;
-    --form-bd-error:#ff0000;
-    --form-bd-active: #5865F2;
-    --form-caption-disable: var(--text-disabled);
+        --form-bg-hover: #f2f1f1;
+        --form-bd-hover: #999999;
+        --form-bd-error:#ff0000;
+        --form-bd-active: #5865F2;
+        --form-caption-disable: var(--text-disabled);
 
-    
+        --day-text-in-month: #858585;
+        --day-text-hover: #232323;
+        --day-text-outside: #c9c9c9;
+        --day-bg-hover: #F1F2FF;
+
 
 // page: 
     // demo.html
