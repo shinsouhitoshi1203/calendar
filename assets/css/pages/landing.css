@@ -45,7 +45,7 @@ body {
 header {
   width: 100%;
   padding: 10px 0;
-  background: #ccc;
+  background: rgba(0, 0, 0, 0.2156862745);
 }
 
 .inner {
@@ -91,7 +91,7 @@ tr > * {
 }
 
 tr:has(th) {
-  background: #767575;
+  background: rgba(118, 117, 117, 0.4901960784);
 }
 
 tr {
@@ -104,7 +104,7 @@ tr {
 }
 
 table tr:nth-of-type(even):not(:has(th)) {
-  background: #bbbbbb;
+  background: rgba(187, 187, 187, 0.2156862745);
 }
 
 th {
@@ -119,6 +119,11 @@ th, td {
 
 body {
   font-family: Aptos;
+}
+
+html {
+  color: white;
+  background: url(https://animerants.net/wp-content/uploads/2023/01/chainsaw-man-denji-01.png) center/cover no-repeat;
 }
 
 /*# sourceMappingURL=landing.css.map */

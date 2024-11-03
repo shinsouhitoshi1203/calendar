@@ -34,6 +34,88 @@ let $$ = document.querySelectorAll.bind(document);
 export default class DatePicker {
     #clone() {
         // will do it later
+        $(`${this.id}`).innerHTML = "";
+        const htmls = `<div class="form__box date__box">
+                        
+                        
+                        <div class="hover-bg"></div>
+                        <div class="date__display">
+                            <i class="fa-regular fa-calendar"></i>
+                            <div class="date__txt">
+                                <p class="date__txt-caption fs-10">Select a date</p>
+                                <div class="date__txt-real fw-700 fs-16">
+                                    <span></span>
+                                    <div class="date__txt-input fw-700 fs-16" data-mode="off">
+                                        <span class="date__txt-char date__txt-selected">y</span>
+                                        <span class="date__txt-char">2</span>
+                                        <span class="date__txt-char">y</span>
+                                        <span class="date__txt-char">y</span>
+                                        <span class="date__txt-splitor">.</span>
+                                        <span class="date__txt-char">m</span>
+                                        <span class="date__txt-char">m</span>
+                                        <span class="date__txt-splitor">.</span>
+                                        <span class="date__txt-char">d</span>
+                                        <span class="date__txt-char">d</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="date__dd">
+                                <img src="./../icons/arrow-down.svg" class="webpage__icon" alt="">
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="date__calendar calendar" type="minified" >
+                        <div class="calendar__main">
+                            <div class="calendar__header d-flex ai-center jc-space-between">
+                                <button class="button fs-14 fw-600 calendar__move">undefined</button>
+                                <div class="calendar__navigate">
+                                    <button class="button button__blank calendar__navigate--prev" title="Previous month">
+                                        <img src="./../icons/arrow-left.svg"  class="webpage__icon" alt="">
+                                    </button>
+                                    <button class="button button__blank calendar__navigate--next" title="Next month">
+                                        <img src="./../icons/arrow-right.svg" class="webpage__icon" alt="">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="calendar__container">
+                                <div class="swiper calendar__selection">
+                                    <div class="swiper-wrapper">
+                                        
+                                        <div class="swiper-slide" data-browse="month">
+                                            <div class="row row-cols-1 calendar__table">
+                                                <div class="col">
+                                                    <div class="calendar__row row gx-0 gy-0 row-cols-7" calendar-cell="day-week">
+                                                        <div class="col">Sun</div>
+                                                        <div class="col">Mon</div>
+                                                        <div class="col">Tue</div>
+                                                        <div class="col">Wed</div>
+                                                        <div class="col">Thu</div>
+                                                        <div class="col">Fri</div>
+                                                        <div class="col">Sat</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">  
+                                                    <div class="swiper calendar__month">
+                                                        <div class="swiper-wrapper"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide" data-browse="period">Test for fun lmfao agohsdfhuosod</div>
+                                        <div class="swiper-slide" data-browse="year">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat, distinctio.</div>
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>`;
+        $(`${this.id}`).insertAdjacentHTML("afterbegin", htmls);
+        $(`${this.id}`).setAttribute("data-input","date");
+        $(`${this.id}`).setAttribute("data-date","null");
+        $(`${this.id}`).setAttribute("data-display-calendar","false")
     }
     
     #adjust() {
@@ -418,7 +500,8 @@ export default class DatePicker {
             $$(`${this.id} .day:not(.day-outside)`).forEach(
                 el=>{
                     el.onclick = function(e) {
-                        _this.pickDayFrom(this)
+                        _this.pickDayFrom(this);
+                        _this.switchVisibility(false);
                     }
                 }
             );
@@ -603,3 +686,87 @@ export default class DatePicker {
         
     }
 }
+
+
+/* 
+
+<div class="form__box date__box">
+                        
+                        
+                        <div class="hover-bg"></div>
+                        <div class="date__display">
+                            <i class="fa-regular fa-calendar"></i>
+                            <div class="date__txt">
+                                <p class="date__txt-caption fs-10">Select a date</p>
+                                <div class="date__txt-real fw-700 fs-16">
+                                    <span></span>
+                                    <div class="date__txt-input fw-700 fs-16" data-mode="off">
+                                        <span class="date__txt-char date__txt-selected">y</span>
+                                        <span class="date__txt-char">2</span>
+                                        <span class="date__txt-char">y</span>
+                                        <span class="date__txt-char">y</span>
+                                        <span class="date__txt-splitor">.</span>
+                                        <span class="date__txt-char">m</span>
+                                        <span class="date__txt-char">m</span>
+                                        <span class="date__txt-splitor">.</span>
+                                        <span class="date__txt-char">d</span>
+                                        <span class="date__txt-char">d</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="date__dd">
+                                <img src="./../icons/arrow-down.svg" class="webpage__icon" alt="">
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="date__calendar calendar" type="minified" >
+                        <div class="calendar__main">
+                            <div class="calendar__header d-flex ai-center jc-space-between">
+                                <button class="button fs-14 fw-600 calendar__move">undefined</button>
+                                <div class="calendar__navigate">
+                                    <button class="button button__blank calendar__navigate--prev" title="Previous month">
+                                        <img src="./../icons/arrow-left.svg"  class="webpage__icon" alt="">
+                                    </button>
+                                    <button class="button button__blank calendar__navigate--next" title="Next month">
+                                        <img src="./../icons/arrow-right.svg" class="webpage__icon" alt="">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="calendar__container">
+                                <div class="swiper calendar__selection">
+                                    <div class="swiper-wrapper">
+                                        
+                                        <div class="swiper-slide" data-browse="month">
+                                            <div class="row row-cols-1 calendar__table">
+                                                <div class="col">
+                                                    <div class="calendar__row row gx-0 gy-0 row-cols-7" calendar-cell="day-week">
+                                                        <div class="col">Sun</div>
+                                                        <div class="col">Mon</div>
+                                                        <div class="col">Tue</div>
+                                                        <div class="col">Wed</div>
+                                                        <div class="col">Thu</div>
+                                                        <div class="col">Fri</div>
+                                                        <div class="col">Sat</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col">  
+                                                    <div class="swiper calendar__month">
+                                                        <div class="swiper-wrapper"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide" data-browse="period">Test for fun lmfao agohsdfhuosod</div>
+                                        <div class="swiper-slide" data-browse="year">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat, distinctio.</div>
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+
+
+*/
